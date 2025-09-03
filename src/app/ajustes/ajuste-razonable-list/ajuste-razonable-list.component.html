@@ -1,0 +1,89 @@
+<div class="container mt-4">
+  <div class="page-header">
+    <div>
+      <h2 class="page-title">Listado de Ajustes Razonables</h2>
+      <p class="page-subtitle">
+        Administra todas las solicitudes registradas en el sistema.
+      </p>
+    </div>
+    <div class="header-actions">
+      <a [routerLink]="['/dashboard']" class="btn btn-outline-secondary">
+        <i class="fa fa-arrow-left me-2"></i> Regresar
+      </a>
+      <a [routerLink]="['/ajustes/create']" class="btn btn-primary">
+        <i class="fa fa-plus me-2"></i> Crear Nuevo Ajuste
+      </a>
+    </div>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <div *ngIf="isLoading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+      </div>
+
+      <div *ngIf="!isLoading && ajustes.length > 0" class="table-responsive">
+        <table class="table ajustes-table">
+          <thead>
+            <tr>
+              <th>Tipo de Ajuste</th>
+              <th>Usuario</th>
+              <th>Estado</th>
+              <th>Fecha Solicitud</th>
+              <th class="text-end">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let ajuste of ajustes">
+              <td>
+                <div class="fw-bold">{{ ajuste.tipoAjuste }}</div>
+                <div class="text-muted small">
+                  {{
+                    (ajuste.descripcion || "").length > 50
+                      ? (ajuste.descripcion | slice : 0 : 50) + "..."
+                      : ajuste.descripcion || "Sin descripción"
+                  }}
+                </div>
+              </td>
+              <td>{{ ajuste.usuario?.nombre }}</td>
+              <td>
+                <span class="badge" [ngClass]="getStatusClass(ajuste.estado)">
+                  {{ ajuste.estado }}
+                </span>
+              </td>
+              <td>{{ ajuste.fechaSolicitud | date : "dd/MM/yyyy" }}</td>
+              <td class="text-end action-buttons">
+                <a
+                  [routerLink]="['/ajustes/edit', ajuste.idAjuste]"
+                  class="btn-action text-primary"
+                  data-bs-toggle="tooltip"
+                  title="Editar Ajuste"
+                >
+                  <i class="fa fa-pencil-alt"></i>
+                </a>
+                <button
+                  type="button"
+                  class="btn-action text-danger"
+                  (click)="deleteAjuste(ajuste.idAjuste)"
+                  data-bs-toggle="tooltip"
+                  title="Eliminar Ajuste"
+                >
+                  <i class="fa fa-trash-alt"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div
+        *ngIf="!isLoading && ajustes.length === 0"
+        class="alert alert-light text-center"
+      >
+        No se encontraron ajustes registrados.
+      </div>
+    </div>
+  </div>
+</div>

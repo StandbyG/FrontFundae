@@ -1,0 +1,414 @@
+<nav
+  class="navbar navbar-expand-lg fixed-top navbar-custom"
+  role="navigation"
+  aria-label="Barra de navegación principal"
+>
+  <div class="container-fluid">
+    <!-- Brand -->
+    <a
+      class="navbar-brand d-flex align-items-center gap-2"
+      [routerLink]="['/dashboard']"
+      aria-label="Ir al dashboard"
+    >
+      <img
+        src="assets/images/logo.png"
+        alt="Logo de la empresa"
+        width="32"
+        height="32"
+        class="logo"
+      />
+      <span class="brand-text d-none d-sm-inline">Plataforma Inclusiva</span>
+    </a>
+
+    <!-- Right: theme toggle on mobile -->
+    <div class="d-flex d-lg-none align-items-center gap-2">
+      <button
+        class="btn btn-icon"
+        type="button"
+        (click)="toggleTheme()"
+        aria-label="Cambiar tema"
+      >
+        <i
+          class="bi"
+          [ngClass]="themeService.currentTheme ? 'bi-sun-fill' : 'bi-moon-fill'"
+        ></i>
+      </button>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Mostrar menú"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+
+    <!-- Collapsible -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <!-- Left links -->
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            [routerLink]="['/dashboard']"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+          >
+            <i class="bi bi-speedometer2 me-1"></i> Dashboard
+          </a>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            id="ajustesDropdown"
+            href="#"
+            role="button"
+            (click)="toggleDropdown('ajustes', $event)"
+            [attr.aria-expanded]="openDropdown === 'ajustes'"
+          >
+            <i class="bi bi-sliders me-1"></i> Ajustes Razonables
+          </a>
+          <ul
+            class="dropdown-menu"
+            [ngClass]="{ show: openDropdown === 'ajustes' }"
+            aria-labelledby="ajustesDropdown"
+          >
+            <li>
+              <a class="dropdown-item" [routerLink]="['/ajustes/create']">
+                <i class="bi bi-plus-circle me-2"></i> Crear Ajuste
+              </a>
+            </li>
+            <li *ngIf="isAdmin">
+              <a class="dropdown-item" [routerLink]="['/ajustes']">
+                <i class="bi bi-card-list me-2"></i> Listar Ajustes
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" [routerLink]="['/ajustes/mis-ajustes']">
+                <i class="bi bi-person-check me-2"></i> Mis Ajustes
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <!-- Administración (solo admin) -->
+        <li class="nav-item dropdown" *ngIf="isAdmin">
+          <a
+            class="nav-link dropdown-toggle"
+            id="adminDropdown"
+            href="#"
+            role="button"
+            (click)="toggleDropdown('admin', $event)"
+            [attr.aria-expanded]="openDropdown === 'admin'"
+          >
+            <i class="bi bi-gear-fill me-1"></i> Administración
+          </a>
+          <ul
+            class="dropdown-menu"
+            [ngClass]="{ show: openDropdown === 'admin' }"
+            aria-labelledby="adminDropdown"
+          >
+            <li>
+              <a class="dropdown-item" [routerLink]="['/admin/usuarios']">
+                <i class="bi bi-people-fill me-2"></i> Gestión de Usuarios
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" [routerLink]="['/search']">
+                <i class="bi bi-search me-2"></i> Buscar Usuarios
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" [routerLink]="['/verificacion/create']">
+                <i class="bi bi-shield-check me-2"></i> Crear Verificación
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+
+      <!-- Center (Admin search) visible md+ -->
+      <div class="nav-search d-none d-lg-block" *ngIf="isAdmin">
+        <div class="search-bar">
+          <i class="bi bi-search search-icon" aria-hidden="true"></i>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Buscar por tipo, descripción o nombre de usuario…"
+            [(ngModel)]="searchTerm"
+            (input)="filterAjustes()"
+            aria-label="Buscar ajustes"
+          />
+        </div>
+      </div>
+
+      <!-- Right actions -->
+      <ul class="navbar-nav ms-auto align-items-center gap-2">
+        <!-- Theme toggle desktop -->
+        <li class="nav-item d-none d-lg-block">
+          <button
+            class="btn btn-icon"
+            (click)="toggleTheme()"
+            aria-label="Cambiar tema"
+          >
+            <i
+              class="bi"
+              [ngClass]="
+                themeService.currentTheme ? 'bi-sun-fill' : 'bi-moon-fill'
+              "
+            ></i>
+          </button>
+        </li>
+
+        <li class="nav-item">
+          <button
+            type="button"
+            class="btn btn-ghost nav-link"
+            (click)="toggleHistorial()"
+            [attr.aria-expanded]="showHistorial"
+          >
+            <i class="bi bi-clock-history me-1"></i>
+            {{ showHistorial ? "Ocultar" : "Historial" }}
+          </button>
+        </li>
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle d-flex align-items-center gap-2"
+            href="#"
+            role="button"
+            (click)="toggleUserMenu($event)"
+            [attr.aria-expanded]="userMenuOpen"
+            aria-label="Menú de usuario"
+          >
+            <span class="d-none d-sm-inline">Mi Cuenta</span>
+          </a>
+          <ul
+            class="dropdown-menu dropdown-menu-end"
+            [ngClass]="{ show: userMenuOpen }"
+            aria-labelledby="userDropdown"
+          >
+            <li>
+              <a class="dropdown-item" [routerLink]="['/perfil']">
+                <i class="bi bi-person-circle me-2"></i> Ver Perfil
+              </a>
+            </li>
+            <li><hr class="dropdown-divider" /></li>
+            <li>
+              <button
+                type="button"
+                class="dropdown-item text-danger"
+                (click)="signOut()"
+              >
+                <i class="bi bi-box-arrow-right me-2"></i> Cerrar Sesión
+              </button>
+            </li>
+          </ul>
+        </li>
+      </ul>
+
+      <!-- Admin search (mobile) -->
+      <div class="w-100 mt-3 d-lg-none" *ngIf="isAdmin">
+        <div class="search-bar">
+          <i class="bi bi-search search-icon" aria-hidden="true"></i>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Buscar por tipo, descripción o nombre de usuario…"
+            [(ngModel)]="searchTerm"
+            (input)="filterAjustes()"
+            aria-label="Buscar ajustes"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main class="content-area">
+  <div class="container-fluid py-4">
+    <header class="page-header" *ngIf="!isLoading">
+      <h2 class="mb-1" *ngIf="isAdmin">Panel de Administración</h2>
+      <h2 class="mb-1" *ngIf="!isAdmin">Mis Ajustes Razonables</h2>
+      <p class="text-muted mb-0">
+        Resumen de las solicitudes y su estado actual.
+      </p>
+    </header>
+
+    <!-- Loader -->
+    <section *ngIf="isLoading" class="loader-wrap">
+      <div
+        class="spinner-border text-primary"
+        style="width: 3rem; height: 3rem"
+        role="status"
+        aria-live="polite"
+        aria-label="Cargando"
+      ></div>
+    </section>
+
+    <!-- ADMIN GRID OF CARDS -->
+    <section *ngIf="!isLoading && isAdmin">
+      <div *ngIf="filteredAjustes.length > 0" class="row g-4">
+        <div
+          class="col-12 col-md-6 col-xl-4"
+          *ngFor="let ajuste of filteredAjustes"
+        >
+          <article
+            class="ajuste-card h-100"
+            tabindex="0"
+            aria-label="Tarjeta de ajuste"
+          >
+            <div
+              class="card-header d-flex justify-content-between align-items-center"
+            >
+              <h5
+                class="card-title mb-0 text-truncate"
+                title="{{ ajuste.tipoAjuste }}"
+              >
+                {{ ajuste.tipoAjuste }}
+              </h5>
+              <span class="badge" [ngClass]="getStatusClass(ajuste.estado)">{{
+                ajuste.estado
+              }}</span>
+            </div>
+            <div class="card-body">
+              <p class="card-text clamp-3" [title]="ajuste.descripcion">
+                {{ ajuste.descripcion }}
+              </p>
+            </div>
+            <div class="card-footer d-flex justify-content-between small">
+              <div class="user-info text-truncate">
+                <i class="bi bi-building me-2"></i
+                ><span>{{ ajuste.usuario.nombre }}</span>
+              </div>
+              <div class="date-info">
+                <i class="bi bi-calendar-event me-2"></i
+                ><time>{{
+                  ajuste.fechaImplementacion | date : "dd/MM/yyyy"
+                }}</time>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <!-- Empty state Admin -->
+      <div
+        *ngIf="filteredAjustes?.length === 0"
+        class="empty-state card mt-4 p-4 text-center"
+      >
+        <i class="bi bi-inboxes display-6 mb-2"></i>
+        <h5 class="mb-1">No hay información</h5>
+        <p class="text-muted mb-0">
+          <ng-container *ngIf="searchTerm; else noAjustesAdmin">
+            No se encontraron ajustes que coincidan con “{{ searchTerm }}”.
+          </ng-container>
+          <ng-template #noAjustesAdmin>
+            Aún no hay ajustes registrados en el sistema.
+          </ng-template>
+        </p>
+      </div>
+    </section>
+
+    <!-- USER: DONUT CHART -->
+    <section *ngIf="!isLoading && !isAdmin">
+      <div *ngIf="ajustes.length > 0" class="card mt-4 shadow-sm">
+        <div
+          class="card-header d-flex align-items-center justify-content-between"
+        >
+          <h5 class="card-title mb-0">Resumen de Mis Solicitudes</h5>
+          <span
+            class="badge rounded-pill bg-primary-subtle text-primary fw-semibold"
+            >Total: {{ ajustes.length }}</span
+          >
+        </div>
+        <div class="card-body chart-container">
+          <div class="chart-wrapper" style="position: relative; height: 350px">
+            <div class="chart-center-text">
+              <span class="total-number">{{ ajustes.length }}</span>
+              <span class="total-label">Total</span>
+            </div>
+            <canvas
+              *ngIf="doughnutChartData"
+              baseChart
+              [data]="doughnutChartData"
+              [type]="doughnutChartType"
+              [options]="doughnutChartOptions"
+              [plugins]="doughnutChartPlugins"
+            >
+            </canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty state User -->
+      <div
+        *ngIf="ajustes?.length === 0"
+        class="empty-state card mt-4 p-4 text-center"
+      >
+        <i class="bi bi-emoji-neutral display-6 mb-2"></i>
+        <h5 class="mb-1">No hay información</h5>
+        <p class="text-muted mb-0">
+          Aún no has solicitado ningún ajuste razonable.
+        </p>
+      </div>
+    </section>
+  </div>
+</main>
+
+<!-- Chatbot Floating Button -->
+<button
+  class="btn-chatbot-toggle"
+  (click)="toggleChatbot()"
+  aria-label="Abrir chatbot"
+>
+  <i class="bi bi-chat-dots-fill"></i>
+</button>
+
+<!-- Chatbot Panel -->
+<div
+  class="chatbot-container"
+  [class.visible]="showChatbot"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Chatbot"
+>
+  <div *ngIf="showChatbot" class="chatbot-content">
+    <app-chatbot (close)="toggleChatbot()"></app-chatbot>
+  </div>
+</div>
+
+<!-- Backdrop for history offcanvas -->
+<div
+  class="offcanvas-backdrop"
+  [class.visible]="showHistorial"
+  (click)="toggleHistorial()"
+  aria-hidden="true"
+></div>
+
+<!-- History Offcanvas -->
+<aside
+  class="historial-offcanvas"
+  [class.visible]="showHistorial"
+  aria-labelledby="historialTitle"
+  role="dialog"
+  aria-modal="true"
+>
+  <div class="offcanvas-header">
+    <h4 class="offcanvas-title" id="historialTitle">
+      Historial de Conversaciones
+    </h4>
+    <button
+      type="button"
+      class="btn-close"
+      (click)="toggleHistorial()"
+      aria-label="Cerrar"
+    ></button>
+  </div>
+  <div class="offcanvas-body">
+    <app-historial-chatbot></app-historial-chatbot>
+  </div>
+</aside>

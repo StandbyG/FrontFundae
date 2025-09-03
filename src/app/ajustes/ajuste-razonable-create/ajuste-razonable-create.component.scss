@@ -1,0 +1,160 @@
+/* Variables para un diseño consistente */
+:host {
+  --primary-color: #005A9C;
+  --light-bg: #f4f7f6;
+  --card-bg: #ffffff;
+  --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  --text-color: #333333;
+  --text-muted: #6c757d;
+  --border-color: #dee2e6;
+  --input-focus-border: #80bdff;
+  --input-focus-shadow: 0 0 0 0.25rem rgba(0, 90, 156, 0.25);
+}
+
+/* Contenedor principal para centrar la tarjeta del formulario */
+.form-container {
+  max-width: 700px;
+  margin: 2rem auto;
+}
+
+/* Tarjeta que envuelve todo el formulario */
+.form-card {
+  background-color: var(--card-bg);
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--card-shadow);
+  overflow: hidden; /* Para que los bordes redondeados se apliquen al header */
+}
+
+/* Encabezado de la tarjeta */
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.btn-back {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--light-bg);
+  color: var(--text-muted);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 1.2rem;
+  transition: all 0.2s ease;
+  &:hover {
+    background-color: var(--primary-color);
+    color: #fff;
+  }
+}
+
+.card-title {
+  font-weight: 700;
+  margin: 0;
+}
+
+.card-subtitle {
+  color: var(--text-muted);
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+/* Cuerpo del formulario */
+.card-body {
+  padding: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem; /* Más espacio entre campos */
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--text-color);
+}
+
+.form-control {
+  padding: 0.8rem 1rem; /* Campos de texto más altos */
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  &:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(0, 90, 156, 0.15);
+  }
+}
+
+/* Pie de la tarjeta con el botón */
+.card-footer {
+  background-color: var(--light-bg);
+  padding: 1.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.btn-primary {
+  padding: 0.9rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  &:disabled {
+    opacity: 0.5;
+  }
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 90, 156, 0.2);
+  }
+}
+
+.ajuste-item {
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  background-color: var(--light-bg);
+}
+
+.ajuste-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  h5 {
+    margin: 0;
+    color: var(--primary-color);
+  }
+}
+
+.form-actions {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.nav-tabs {
+  border-bottom: 2px solid var(--border-color);
+  .nav-item {
+    margin-bottom: -2px; /* Alinea el borde del link con el borde principal */
+  }
+  .nav-link {
+    border: none;
+    background: none;
+    color: var(--text-muted);
+    font-weight: 600;
+    padding: 0.8rem 1.5rem;
+    cursor: pointer;
+
+    &.active {
+      color: var(--primary-color);
+      border-bottom: 2px solid var(--primary-color);
+    }
+  }
+}

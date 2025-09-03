@@ -1,0 +1,55 @@
+/* Estilos para la lista de logs */
+.historial-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.log-entry {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+}
+
+.log-icon {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  &.user {
+    background-color: #005A9C; // Color para el usuario
+  }
+}
+
+.log-content {
+  p {
+    margin: 0;
+  }
+  .log-question {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  .log-answer {
+    color: #333;
+    line-height: 1.6;
+  }
+  .log-timestamp {
+    display: block;
+    font-size: 0.75rem;
+    color: #6c757d;
+    margin-top: 0.75rem;
+    text-align: right;
+  }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+}

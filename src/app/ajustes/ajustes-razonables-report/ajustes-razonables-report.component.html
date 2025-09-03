@@ -1,0 +1,22 @@
+<div class="report-container">
+  <h2>Ajustes Razonables del Usuario</h2>
+
+  <div *ngIf="ajustes.length === 0" class="no-data">
+    <p>No hay ajustes registrados para este usuario.</p>
+  </div>
+
+  <div *ngIf="ajustes.length > 0" class="chart-controls">
+    <label>Tipo de gráfico:</label>
+    <button *ngFor="let tipo of chartTypes" (click)="cambiarTipo(tipo)" [class.active]="chartType === tipo">
+      {{ tipo | titlecase }}
+    </button>
+  </div>
+
+  <div class="chart-box" *ngIf="ajustes.length > 0">
+    <canvas baseChart
+      [data]="chartData"
+      [type]="chartType"
+      [options]="chartOptions">
+    </canvas>
+  </div>
+</div>

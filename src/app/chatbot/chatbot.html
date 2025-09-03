@@ -1,0 +1,36 @@
+<div class="chatbot-container">
+  <!-- Header -->
+  <div class="chatbot-header">
+    <div class="header-left">
+      <img src="assets/icons/roboamigo.svg" alt="Bot" class="header-avatar" />
+      <div>
+        <h2>ROBOAMIGO</h2>
+        <p>Tu asistente virtual</p>
+      </div>
+    </div>
+    <button class="close-btn" (click)="closeChatbot()">✖</button>
+  </div>
+
+  <!-- Mensajes -->
+  <div class="chatbot-messages">
+    <div *ngFor="let message of messages" class="message fade-in">
+      <div class="user-message">
+        <div class="message-bubble user-bubble">{{ message.user }}</div>
+        <img src="assets/icons/user.svg" alt="Usuario" class="avatar" />
+      </div>
+
+      <div class="bot-response">
+        <img src="assets/icons/roboamigo.svg" alt="Bot" class="avatar" />
+        <div class="message-bubble bot-bubble">{{ message.bot }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Input -->
+  <div class="input-container">
+    <input [(ngModel)]="userMessage" placeholder="Escribe un mensaje..." />
+    <button (click)="sendMessage()">
+      <span class="send-icon">➤</span>
+    </button>
+  </div>
+</div>

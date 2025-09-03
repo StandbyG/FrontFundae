@@ -1,0 +1,38 @@
+/* You can add global styles to this file, and also import other style files */
+/* styles.scss */
+
+/* Estilos globales: */
+body {
+  font-family: "Arial", sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+  background: #f9f9f9;
+  color: #222;
+  transition: all 0.3s ease;
+}
+
+/* Aquí puedes definir el color global o la tipografía que quieres usar en toda la aplicación */
+button {
+  cursor: pointer;
+}
+
+input,
+button {
+  font-family: "Arial", sans-serif;
+}
+
+body.dark-theme {
+  background: #121212;
+  color: #e4e4e4;
+}
+
+body.dark-theme .card {
+  background: #1e1e1e;
+  color: #fff;
+}
+
+body.dark-theme .btn {
+  background: #333;
+  color: #fff;
+}

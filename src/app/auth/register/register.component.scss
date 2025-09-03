@@ -1,0 +1,41 @@
+/* General */
+body {
+  background: linear-gradient(135deg, #f0f4ff, #e6ecff);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Card */
+.card {
+  border-radius: 15px;
+  background: #fff;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Inputs */
+.form-floating .form-control {
+  border-radius: 10px;
+}
+.form-floating label {
+  color: #6c757d;
+}
+
+/* Botón */
+button {
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 10px;
+  transition: 0.3s;
+}
+button:hover {
+  transform: scale(1.02);
+}
+
+/* Mensajes */
+.text-danger,
+.text-success {
+  font-size: 14px;
+}

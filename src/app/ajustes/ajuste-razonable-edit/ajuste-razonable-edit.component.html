@@ -1,0 +1,63 @@
+<div class="edit-ajuste-container">
+  <!-- Header -->
+  <div class="edit-header">
+    <button class="btn-back" (click)="goBack()">← Regresar</button>
+    <h2 class="title">Editar Estado del Ajuste</h2>
+  </div>
+
+  <!-- Detalles -->
+  <div class="ajuste-details" *ngIf="!isLoading">
+    <h5 class="section-title">Detalles de la Solicitud</h5>
+    <dl class="details-grid">
+      <div>
+        <dt>Tipo de Ajuste:</dt>
+        <dd>{{ ajusteCompleto?.tipoAjuste || "N/A" }}</dd>
+      </div>
+      <div>
+        <dt>Usuario:</dt>
+        <dd>{{ ajusteCompleto?.usuario?.nombreEmpresa || "N/A" }}</dd>
+      </div>
+      <div>
+        <dt>Descripción:</dt>
+        <dd>{{ ajusteCompleto?.descripcion || "Sin descripción" }}</dd>
+      </div>
+    </dl>
+  </div>
+
+  <!-- Formulario -->
+  <form
+    class="edit-form"
+    [formGroup]="ajusteForm"
+    (ngSubmit)="onSubmit()"
+    *ngIf="!isLoading"
+  >
+    <div class="form-row">
+      <div class="form-group">
+        <label for="estado" class="form-label">Estado</label>
+        <select id="estado" class="form-select" formControlName="estado">
+          <option value="pendiente">Pendiente</option>
+          <option value="aprobado">Aprobado</option>
+          <option value="rechazado">Rechazado</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="fechaImplementacion" class="form-label"
+          >Fecha de Implementación</label
+        >
+        <input
+          type="date"
+          id="fechaImplementacion"
+          class="form-control"
+          formControlName="fechaImplementacion"
+        />
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn-primary" [disabled]="ajusteForm.invalid">
+        ✅ Actualizar Estado
+      </button>
+    </div>
+  </form>
+</div>

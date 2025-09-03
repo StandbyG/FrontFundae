@@ -1,0 +1,130 @@
+<div class="form-container">
+  <div class="form-card">
+
+    <div class="card-header">
+      <a [routerLink]="['/dashboard']" class="btn-back">
+        <i class="fa fa-arrow-left"></i>
+      </a>
+      <div>
+        <h2 class="card-title">Crear Nuevos Ajustes Razonables</h2>
+        <p class="card-subtitle">Elige un método: regístralos manualmente o sube un archivo Excel.</p>
+      </div>
+    </div>
+
+    <div class="card-body">
+      <ul class="nav nav-tabs nav-fill mb-4">
+        <li class="nav-item">
+          <a class="nav-link" [class.active]="activeTab === 'manual'" (click)="activeTab = 'manual'">
+            <i class="fa fa-edit me-2"></i>Registro Manual
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [class.active]="activeTab === 'excel'" (click)="activeTab = 'excel'">
+            <i class="fa fa-file-excel me-2"></i>Carga Masiva por Excel
+          </a>
+        </li>
+      </ul>
+
+      <div class="tab-content">
+
+        <div *ngIf="activeTab === 'manual'">
+          <form [formGroup]="ajusteForm" (ngSubmit)="onSubmit()">
+            
+            <div formArrayName="ajustes">
+              <div *ngFor="let ajusteControl of ajustesFormArray.controls; let i = index" [formGroupName]="i" class="ajuste-item">
+                
+                <div class="ajuste-item-header">
+                  <h5>Ajuste #{{ i + 1 }}</h5>
+                  <button type="button" class="btn btn-sm btn-outline-danger" (click)="removeAjuste(i)" *ngIf="ajustesFormArray.controls.length > 1">
+                    <i class="fa fa-trash"></i> Eliminar
+                  </button>
+                </div>
+                
+                <div class="form-group">
+                  <label>Tipo de Ajuste</label>
+                  <input type="text" class="form-control" formControlName="tipoAjuste" placeholder="Ej: Silla ergonómica...">
+                </div>
+                
+                <div class="form-group">
+                  <label>Descripción</label>
+                  <textarea class="form-control" rows="3" formControlName="descripcion" placeholder="Describe la necesidad..."></textarea>
+                </div>
+                
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>Fecha de Recomendación</label>
+                      <input type="date" class="form-control" formControlName="fechaRecomendacion">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>Fecha de Implementación (Opcional)</label>
+                      <input type="date" class="form-control" formControlName="fechaImplementacion">
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn btn-secondary" (click)="addAjuste()">
+                <i class="fa fa-plus me-2"></i> Añadir Otro Ajuste
+              </button>
+            </div>
+
+            <div class="card-footer">
+              <button type="submit" class="btn btn-primary w-100" [disabled]="ajusteForm.invalid">
+                <i class="fa fa-save me-2"></i> Guardar Ajustes Manuales
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div *ngIf="activeTab === 'excel'">
+          
+          <div class="upload-box">
+            <i class="fa fa-file-excel upload-icon"></i>
+            <p class="upload-title">Arrastra y suelta tu archivo aquí o</p>
+            <label for="file-upload" class="btn btn-primary">Seleccionar Archivo</label>
+            <input id="file-upload" type="file" (change)="onFileChange($event)" accept=".xlsx, .xls">
+            <p *ngIf="fileName" class="file-name mt-3">Archivo seleccionado: <strong>{{ fileName }}</strong></p>
+          </div>
+
+          <div *ngIf="parsedData.length > 0" class="mt-4">
+            <h4 class="preview-title">Datos a Cargar ({{ parsedData.length }} registros)</h4>
+            <div class="table-responsive preview-table">
+              <table class="table table-sm table-striped">
+                <thead>
+                  <tr>
+                    <th>Tipo de Ajuste</th>
+                    <th>Descripción</th>
+                    <th>Fecha Recomendación</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of parsedData | slice:0:5"> <td>{{ item['Tipo de Ajuste'] }}</td>
+                    <td>{{ item['Descripcion'] }}</td>
+                    <td>{{ item['Fecha Recomendacion'] | date:'dd/MM/yyyy' }}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <p *ngIf="parsedData.length > 5" class="text-center text-muted">...y {{ parsedData.length - 5 }} más.</p>
+            </div>
+          </div>
+
+          <div class="card-footer mt-4">
+            <button type="button" class="btn btn-success w-100" (click)="onSubmit()" [disabled]="parsedData.length === 0 || isUploading">
+              <span *ngIf="!isUploading">
+                <i class="fa fa-upload me-2"></i> Cargar y Guardar {{ parsedData.length }} Ajustes
+              </span>
+              <span *ngIf="isUploading" class="spinner-border spinner-border-sm" role="status"></span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

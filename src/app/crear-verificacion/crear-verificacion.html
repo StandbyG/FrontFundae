@@ -1,0 +1,36 @@
+<div class="container mt-5">
+  <!-- Título -->
+  <h2 class="text-center mb-4">Crear Verificación</h2>
+
+  <!-- Formulario -->
+  <form (ngSubmit)="createVerificacion()">
+    
+    <div class="mb-3">
+      <label for="fechaVerificacion" class="form-label">Fecha de Verificación</label>
+      <input type="date" class="form-control" id="fechaVerificacion" [(ngModel)]="verificacion.fechaVerificacion" name="fechaVerificacion" required />
+    </div>
+
+    <div class="mb-3">
+      <label for="observaciones" class="form-label">Observaciones</label>
+      <textarea class="form-control" id="observaciones" [(ngModel)]="verificacion.observaciones" name="observaciones" required></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label for="resultado" class="form-label">Resultado</label>
+      <select class="form-select" id="resultado" [(ngModel)]="verificacion.resultado" name="resultado" required>
+        <option value="cumple">Cumple</option>
+        <option value="no cumple">No cumple</option>
+        <option value="parcial">Parcial</option>
+      </select>
+    </div>
+
+    <!-- Mensaje de Error -->
+    <div *ngIf="errorMessage" class="alert alert-danger mt-3">{{ errorMessage }}</div>
+
+    <!-- Botón de Regresar al Dashboard -->
+    <button type="button" class="btn btn-secondary w-100 mt-3" (click)="goToDashboard()">Regresar al Dashboard</button>
+
+    <!-- Botón de Enviar -->
+    <button type="submit" class="btn btn-primary w-100 mt-3">Registrar</button>
+  </form>
+</div>

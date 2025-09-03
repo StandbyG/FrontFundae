@@ -1,0 +1,128 @@
+.edit-ajuste-container {
+  max-width: 720px;
+  margin: 30px auto;
+  padding: 30px;
+  background: var(--bs-light, #fff);
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.edit-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #f1f1f1;
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0;
+}
+
+.btn-back {
+  background: transparent;
+  border: none;
+  color: #007bff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+.btn-back:hover {
+  background: #f0f4ff;
+}
+
+.section-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #495057;
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.details-grid dt {
+  font-weight: 600;
+  color: #34495e;
+}
+.details-grid dd {
+  margin: 0;
+  color: #555;
+  font-size: 0.95rem;
+}
+
+.edit-form {
+  margin-top: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+.form-label {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.form-control,
+.form-select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 15px;
+  transition: border 0.2s ease;
+}
+.form-control:focus,
+.form-select:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.form-actions {
+  margin-top: 10px;
+}
+.btn-primary {
+  background: #007bff;
+  border: none;
+  color: #fff;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: 600;
+  width: 100%;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.btn-primary:hover {
+  background: #0056b3;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .details-grid,
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  .edit-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}

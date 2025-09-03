@@ -1,0 +1,18 @@
+<div class="historial-list">
+  <div *ngIf="!logs || logs.length === 0" class="empty-state">
+    </div>
+  
+  <div *ngFor="let log of logs" class="log-entry">
+    <div class="log-icon user">
+      <i class="fa fa-user"></i>
+    </div>
+    <div class="log-content">
+      <p *ngIf="isAdmin" class="log-user-name">
+        <strong>Usuario:</strong> {{ log.usuario.nombre}}
+      </p>
+      <p class="log-question">{{ log.pregunta }}</p>
+      <p class="log-answer">{{ log.respuesta }}</p>
+      <span class="log-timestamp">{{ log.fecha | date:'medium' }}</span>
+    </div>
+  </div>
+</div>

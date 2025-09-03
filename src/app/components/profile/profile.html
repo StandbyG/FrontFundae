@@ -1,0 +1,35 @@
+<div class="profile-container">
+  <h2>Mi Perfil</h2>
+  <p>Aquí puedes ver y actualizar tu información personal.</p>
+
+  <div *ngIf="isLoading" class="text-center">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </div>
+
+  <form *ngIf="!isLoading" [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+      <label for="nombre" class="form-label">Nombre</label>
+      <input type="text" id="nombre" class="form-control" formControlName="nombre">
+    </div>
+
+    <div class="mb-3">
+      <label for="apellido" class="form-label">Apellido</label>
+      <input type="text" id="apellido" class="form-control" formControlName="apellido">
+    </div>
+
+    <div class="mb-3">
+      <label for="correo" class="form-label">Correo Electrónico</label>
+      <input type="email" id="correo" class="form-control" formControlName="correo">
+    </div>
+    
+    <button type="submit" class="btn btn-primary w-100" [disabled]="profileForm.invalid || isLoading">
+      Guardar Cambios
+    </button>
+  </form>
+
+  <div *ngIf="successMessage" class="alert alert-success mt-3">
+    {{ successMessage }}
+  </div>
+</div>

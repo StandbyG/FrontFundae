@@ -1,0 +1,179 @@
+<div class="login-page">
+  <div class="login-container">
+    <!-- Lado izquierdo: formulario -->
+    <div class="login-left">
+      <div class="form-wrapper">
+        <h2>Bienvenido de nuevo</h2>
+        <p class="subtitle">Inicia sesión para continuar</p>
+
+        <form (ngSubmit)="login()" #loginForm="ngForm" novalidate>
+          <!-- Campo Email -->
+          <div
+            class="input-group"
+            [class.error]="correoField.invalid && correoField.touched"
+          >
+            <i class="fa fa-envelope icon" aria-hidden="true"></i>
+            <input
+              type="email"
+              [(ngModel)]="correo"
+              name="correo"
+              placeholder="Correo electrónico"
+              required
+              email
+              autocomplete="email"
+              #correoField="ngModel"
+              [class.invalid]="correoField.invalid && correoField.touched"
+              aria-describedby="correo-error"
+            />
+          </div>
+          <div
+            id="correo-error"
+            *ngIf="correoField.invalid && correoField.touched"
+            class="error-message"
+            role="alert"
+            aria-live="polite"
+          >
+            <span *ngIf="correoField.errors?.['required']"
+              >El correo es obligatorio.</span
+            >
+            <span *ngIf="correoField.errors?.['email']"
+              >Ingresa un correo válido.</span
+            >
+          </div>
+
+          <!-- Campo Contraseña -->
+          <div
+            class="input-group"
+            [class.error]="passwordField.invalid && passwordField.touched"
+          >
+            <i class="fa fa-lock icon" aria-hidden="true"></i>
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              [(ngModel)]="password"
+              name="password"
+              placeholder="Contraseña"
+              required
+              minlength="6"
+              autocomplete="current-password"
+              #passwordField="ngModel"
+              [class.invalid]="passwordField.invalid && passwordField.touched"
+              aria-describedby="password-error"
+            />
+            <button
+              type="button"
+              class="password-toggle"
+              (click)="togglePassword()"
+              [attr.aria-label]="
+                showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'
+              "
+              tabindex="0"
+            >
+              <i
+                [class]="showPassword ? 'fa fa-eye-slash' : 'fa fa-eye'"
+                aria-hidden="true"
+              ></i>
+            </button>
+          </div>
+          <div
+            id="password-error"
+            *ngIf="passwordField.invalid && passwordField.touched"
+            class="error-message"
+            role="alert"
+            aria-live="polite"
+          >
+            <span *ngIf="passwordField.errors?.['required']"
+              >La contraseña es obligatoria.</span
+            >
+            <span *ngIf="passwordField.errors?.['minlength']">
+              La contraseña debe tener al menos 6 caracteres.
+            </span>
+          </div>
+
+          <!-- Recordar sesión -->
+          <div class="checkbox-group">
+            <label class="checkbox-label">
+              <input
+                type="checkbox"
+                [(ngModel)]="rememberMe"
+                name="rememberMe"
+                class="checkbox-input"
+              />
+              <span class="checkbox-custom"></span>
+              Recordar mi sesión
+            </label>
+          </div>
+
+          <!-- Botón de envío -->
+          <button
+            type="submit"
+            class="btn-primary"
+            [disabled]="loginForm.invalid || isLoading"
+            [attr.aria-label]="
+              isLoading ? 'Iniciando sesión...' : 'Iniciar sesión'
+            "
+          >
+            <span *ngIf="!isLoading">Iniciar sesión</span>
+            <span *ngIf="isLoading" class="loading-content">
+              <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+              Iniciando sesión...
+            </span>
+          </button>
+
+          <div class="links">
+            <a
+              href="#"
+              (click)="goToForgotPassword($event)"
+              class="forgot-password-link"
+            >
+              ¿Olvidaste tu contraseña?
+            </a>
+          </div>
+
+          <!-- Mensaje de error general -->
+          <div
+            *ngIf="error"
+            class="error-message error-general"
+            role="alert"
+            aria-live="assertive"
+          >
+            <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+            {{ error }}
+          </div>
+
+          <!-- Mensaje de éxito -->
+          <div
+            *ngIf="successMessage"
+            class="success-message"
+            role="alert"
+            aria-live="polite"
+          >
+            <i class="fa fa-check-circle" aria-hidden="true"></i>
+            {{ successMessage }}
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Lado derecho: ilustración -->
+    <div class="login-right" aria-hidden="true">
+      <picture>
+        <img
+          src="assets/images/login_image.png"
+          alt="Imagen de "
+          loading="lazy"
+          width="380"
+          height="300"
+        />
+      </picture>
+      <h3>¿No tienes cuenta?</h3>
+      <p>Únete y sé parte del cambio positivo hoy mismo.</p>
+      <button
+        (click)="goToRegister()"
+        class="btn-secondary"
+        aria-label="Ir a página de registro"
+      >
+        Regístrate
+      </button>
+    </div>
+  </div>
+</div>

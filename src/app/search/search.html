@@ -1,0 +1,17 @@
+<div class="container mt-5">
+  <h2>Buscar Usuario por ID</h2>
+  <form (ngSubmit)="searchUserById()">
+    <div class="form-group">
+      <label for="userId">ID de Usuario</label>
+      <input type="number" class="form-control" id="userId" [(ngModel)]="userId" name="userId" required />
+    </div>
+    <div *ngIf="errorMessage" class="alert alert-danger mt-3">{{ errorMessage }}</div>
+    <button type="submit" class="btn btn-primary mt-3">Buscar</button>
+  </form>
+
+  <div *ngIf="user" class="mt-3">
+    <h4>Detalles del Usuario:</h4>
+    <p>ID: {{ user.idUsuario }}</p>
+    <p>Correo: {{ user.correo }}</p>
+  </div>
+</div>
