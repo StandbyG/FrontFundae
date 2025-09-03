@@ -6,8 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "build:prod": "ng build --configuration=production && npm run generate-env",
-    "generate-env": "envsubst < src/assets/env.template.js > dist/tu-app/assets/env.js",
+    "build:prod": "ng build --configuration=production",
     "test": "ng test"
   },
   "private": true,
