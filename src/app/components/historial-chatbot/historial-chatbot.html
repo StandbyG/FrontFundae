@@ -1,18 +1,140 @@
-<div class="historial-list">
-  <div *ngIf="!logs || logs.length === 0" class="empty-state">
+<div class="historial-container">
+  <!-- Header with Search -->
+  <div class="historial-header">
+    <div class="header-title">
+      <h3>Historial de Conversaciones</h3>
+      <span class="total-count">{{ logs.length }} conversaciones</span>
     </div>
-  
-  <div *ngFor="let log of logs" class="log-entry">
-    <div class="log-icon user">
-      <i class="fa fa-user"></i>
+    
+    <!-- Search Bar -->
+    <div class="search-wrapper">
+      <i class="bi bi-search search-icon"></i>
+      <input
+        type="text"
+        class="search-input"
+        [(ngModel)]="filtroPregunta"
+        (input)="aplicarFiltros()"
+        placeholder="Buscar en conversaciones..."
+      />
+      <button 
+        *ngIf="filtroPregunta" 
+        class="clear-search"
+        (click)="filtroPregunta = ''; aplicarFiltros()"
+      >
+        <i class="bi bi-x"></i>
+      </button>
     </div>
-    <div class="log-content">
-      <p *ngIf="isAdmin" class="log-user-name">
-        <strong>Usuario:</strong> {{ log.usuario.nombre}}
-      </p>
-      <p class="log-question">{{ log.pregunta }}</p>
-      <p class="log-answer">{{ log.respuesta }}</p>
-      <span class="log-timestamp">{{ log.fecha | date:'medium' }}</span>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-state">
+    <div class="spinner-border text-primary" role="status"></div>
+    <p>Cargando historial...</p>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!isLoading && logs.length === 0" class="empty-state">
+    <div class="empty-icon">
+      <i class="bi bi-chat-left-text"></i>
     </div>
+    <h4>Sin conversaciones</h4>
+    <p>Aún no hay conversaciones registradas con el chatbot.</p>
+  </div>
+
+  <!-- No Results -->
+  <div *ngIf="!isLoading && logs.length > 0 && filteredLogs.length === 0" class="empty-state">
+    <div class="empty-icon">
+      <i class="bi bi-search"></i>
+    </div>
+    <h4>Sin resultados</h4>
+    <p>No se encontraron conversaciones que coincidan con "{{ filtroPregunta }}"</p>
+    <button class="btn-clear-filter" (click)="filtroPregunta = ''; aplicarFiltros()">
+      Limpiar búsqueda
+    </button>
+  </div>
+
+  <!-- Logs List -->
+  <div *ngIf="!isLoading && paginatedLogs.length > 0" class="logs-list">
+    <div 
+      *ngFor="let log of paginatedLogs; let i = index" 
+      class="log-card"
+      [@fadeIn]
+    >
+      <!-- User Info (Admin only) -->
+      <div *ngIf="isAdmin" class="log-user-info">
+        <div class="user-badge">
+          <i class="bi bi-person-circle"></i>
+          <span>{{ log.usuario.nombreEmpresa }}</span>
+        </div>
+        <span class="log-date">{{ log.fecha | date:'dd/MM/yyyy HH:mm' }}</span>
+      </div>
+
+      <!-- Conversation -->
+      <div class="conversation">
+        <!-- Question -->
+        <div class="message-item question">
+          <div class="message-header">
+            <div class="avatar user-avatar">
+              <i class="bi bi-person-fill"></i>
+            </div>
+            <span class="message-label">Pregunta</span>
+            <span *ngIf="!isAdmin" class="message-time">{{ log.fecha | date:'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+          <div class="message-content">
+            <p>{{ log.pregunta }}</p>
+          </div>
+        </div>
+
+        <!-- Answer -->
+        <div class="message-item answer">
+          <div class="message-header">
+            <div class="avatar bot-avatar">
+              <i class="bi bi-robot"></i>
+            </div>
+            <span class="message-label">Respuesta</span>
+          </div>
+          <div class="message-content">
+            <p>{{ log.respuesta }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="log-actions">
+        <button class="action-btn" title="Copiar conversación" (click)="copyConversation(log)">
+          <i class="bi bi-clipboard"></i>
+        </button>
+        <button class="action-btn" title="Compartir" (click)="shareConversation(log)">
+          <i class="bi bi-share"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <div *ngIf="totalPages() > 1" class="pagination">
+    <button 
+      class="page-btn"
+      [disabled]="currentPage === 1"
+      (click)="cambiarPagina(-1)"
+    >
+      <i class="bi bi-chevron-left"></i>
+      Anterior
+    </button>
+    
+    <div class="page-info">
+      <span class="page-current">{{ currentPage }}</span>
+      <span class="page-separator">de</span>
+      <span class="page-total">{{ totalPages() }}</span>
+    </div>
+    
+    <button 
+      class="page-btn"
+      [disabled]="currentPage === totalPages()"
+      (click)="cambiarPagina(1)"
+    >
+      Siguiente
+      <i class="bi bi-chevron-right"></i>
+    </button>
   </div>
 </div>

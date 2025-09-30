@@ -77,10 +77,9 @@ export class LoginComponent implements OnDestroy {
   }
 
   goToForgotPassword(event: Event): void {
-    event.preventDefault();
-    this.router.navigate(['/forgot-password']);
-  }
-
+  event.preventDefault();
+  this.router.navigate(['/reset-password-request']);
+}
   // === UTILIDADES DE UI ===
   togglePassword(): void {
     this.showPassword = !this.showPassword;

@@ -48,19 +48,75 @@ export class AjusteRazonableListComponent implements OnInit, AfterViewInit {
     this.router.navigate(['/dashboard']);  // Cambia '/dashboard' por la ruta correspondiente a tu Dashboard
   }
    getStatusClass(estado: string): string {
-    if (!estado) {
-      return 'badge bg-secondary'; // Clase por defecto si el estado es nulo
-    }
-
-    switch (estado.toLowerCase()) {
-      case 'aprobado':
-        return 'badge bg-success';
-      case 'pendiente':
-        return 'badge bg-warning text-dark';
-      case 'rechazado':
-        return 'badge bg-danger';
-      default:
-        return 'badge bg-secondary';
-    }
+  if (!estado) {
+    return 'badge badge-secondary';
   }
+
+  const estadoLower = estado.toLowerCase();
+  switch (estadoLower) {
+    case 'aprobado':
+      return 'badge badge-aprobado';
+    case 'pendiente':
+      return 'badge badge-pendiente';
+    case 'rechazado':
+      return 'badge badge-rechazado';
+    case 'en proceso':
+    case 'en-proceso':
+      return 'badge badge-en-proceso';
+    case 'completado':
+      return 'badge badge-completado';
+    default:
+      return 'badge badge-secondary';
+  }
+}
+
+  getShortDescription(ajuste: any): string {
+  const desc = ajuste.observacion || ajuste.descripcion || ajuste.ajustesSugeridos || 'Sin descripción';
+  return desc.length > 80 ? desc.substring(0, 80) + '...' : desc;
+}
+
+  getOriginClass(origen: string): string {
+    if (!origen) return 'badge-empresa';
+    return `badge-${origen.toLowerCase()}`;
+  }
+  getUrgencyClass(urgencia: string): string {
+  if (!urgencia) return '';
+  return `urgency-${urgencia.toLowerCase()}`;
+}
+
+getDifficultyClass(dificultad: string): string {
+  if (!dificultad) return '';
+  return `difficulty-${dificultad.toLowerCase()}`;
+}
+
+getStatusIcon(estado: string): string {
+  const icons: { [key: string]: string } = {
+    'PENDIENTE': 'fa-clock',
+    'APROBADO': 'fa-check-circle',
+    'RECHAZADO': 'fa-times-circle',
+    'EN PROCESO': 'fa-spinner',
+    'COMPLETADO': 'fa-check-double'
+  };
+  return icons[estado?.toUpperCase()] || 'fa-circle';
+}
+getPendingCount(): number {
+  return this.ajustes.filter(a => a.estado?.toLowerCase() === 'pendiente').length;
+}
+
+getApprovedCount(): number {
+  return this.ajustes.filter(a => a.estado?.toLowerCase() === 'aprobado').length;
+}
+
+// Método mejorado para confirmar eliminación
+confirmDelete(id: number): void {
+  if (confirm('¿Estás seguro de que deseas eliminar esta solicitud? Esta acción no se puede deshacer.')) {
+    this.deleteAjuste(id);
+  }
+}
+viewAjuste(id: number): void {
+  this.router.navigate(['/ajustes/detail', id]); // o mostrar un modal
+}
+
+  
+  
 }

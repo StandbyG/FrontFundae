@@ -1,0 +1,115 @@
+<header class="page-header">
+  <button class="link-back" type="button" (click)="goBack()">
+    <span class="icon" aria-hidden="true">←</span> Volver al dashboard
+  </button>
+  <h1 class="page-title">Crear retroalimentación</h1>
+  <p class="page-subtitle">Comparte una evaluación clara y útil sobre el ajuste seleccionado.</p>
+</header>
+
+<section class="container">
+  <!-- Alerts accesibles -->
+  <div *ngIf="errorMessage" class="alert alert-error" role="alert" aria-live="assertive">
+    {{ errorMessage }}
+  </div>
+  <div *ngIf="successMessage" class="alert alert-success" role="status" aria-live="polite">
+    {{ successMessage }}
+  </div>
+
+  <form (ngSubmit)="onSubmit()" #feedbackForm="ngForm" class="card">
+    <div class="card-body">
+      <div class="form-grid">
+        <!-- Ajuste -->
+        <div class="form-group">
+          <label for="ajusteId">Seleccionar Ajuste</label>
+          <select
+            id="ajusteId"
+            [(ngModel)]="ajusteId"
+            name="ajusteId"
+            required
+            [disabled]="loadingAjustes"
+            aria-describedby="ajusteHelp"
+          >
+            <option value="" disabled selected>— Elige un ajuste —</option>
+            <option *ngFor="let ajuste of ajustesRazonables" [value]="ajuste.idAjuste">
+              {{ ajuste.tipoAjuste }}
+            </option>
+          </select>
+          <small id="ajusteHelp" class="help">Necesario para asociar la retroalimentación.</small>
+          <div class="field-error" *ngIf="feedbackForm.submitted && !ajusteId">Debes seleccionar un ajuste.</div>
+        </div>
+
+        <!-- Calificación con estrellas -->
+        <div class="form-group">
+          <label>Calificación</label>
+          <div
+            class="stars"
+            role="radiogroup"
+            aria-label="Calificación de 1 a 5"
+          >
+            <button
+              *ngFor="let s of stars"
+              type="button"
+              class="star"
+              [class.active]="calificacion >= s"
+              (click)="setRating(s)"
+              (keydown.enter)="setRating(s)"
+              role="radio"
+              [attr.aria-checked]="calificacion === s"
+              [attr.aria-label]="s + ' estrellas'"
+            >
+              ★
+            </button>
+          </div>
+          <small class="help">Tu calificación actual: {{ calificacion }}/5</small>
+        </div>
+
+        <!-- Comentario -->
+        <div class="form-group form-group--full">
+          <label for="comentario">Comentario</label>
+          <textarea
+            id="comentario"
+            [(ngModel)]="comentario"
+            name="comentario"
+            required
+            minlength="10"
+            maxlength="500"
+            rows="6"
+            aria-describedby="comentarioHelp contadorComentario"
+          ></textarea>
+          <small id="comentarioHelp" class="help">Sé específico: qué funcionó y qué mejorar.</small>
+          <div id="contadorComentario" class="counter">
+            {{ (comentario.length || 0) }} / 500
+          </div>
+          <div class="field-error" *ngIf="feedbackForm.submitted && (!comentario || comentario.length < 10)">
+            El comentario debe tener al menos 10 caracteres.
+          </div>
+        </div>
+
+        <!-- Toggle visible empleador -->
+        <div class="form-group">
+          <label for="visibleEmpleador">Visible para el empleador</label>
+          <label class="switch">
+            <input
+              type="checkbox"
+              id="visibleEmpleador"
+              [(ngModel)]="visibleEmpleador"
+              name="visibleEmpleador"
+            />
+            <span class="slider"></span>
+          </label>
+          <small class="help">
+            Si está activado, el empleador podrá ver esta retroalimentación.
+          </small>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-footer">
+      <button type="button" class="btn btn-secondary" (click)="goBack()">Cancelar</button>
+      <button type="submit" class="btn btn-primary" [disabled]="loading || !feedbackForm.form.valid">
+        <span class="spinner" *ngIf="loading" aria-hidden="true"></span>
+        {{ loading ? 'Enviando…' : 'Enviar retroalimentación' }}
+      </button>
+    </div>
+  </form>
+</section>

@@ -1,12 +1,20 @@
-import { Usuario } from './usuario.model'; // Importas la interfaz de Usuario
+import { Usuario } from './usuario.model';
 
 export interface AjusteRazonable {
-  idAjuste: number; // Ya no es opcional, porque siempre lo recibes
+  idAjuste: number;
   tipoAjuste: string;
   descripcion: string;
-  fechaRecomendacion: string; // Se reciben como string
+  fechaRecomendacion: string;
   fechaImplementacion: string;
   estado: string;
   alertado: boolean;
-  usuario: Usuario; // Recibes el objeto de usuario anidado
+  usuario: Usuario;
+  origen: 'EMPRESA' | 'ONG';
+  espacio?: string;
+  observacion?: string;
+  ajustesSugeridos?: string;
+  refNormativa?: string;
+  refFotografica?: string;
+  dificultad?: 'BAJA' | 'MEDIA' | 'ALTA';
+  urgencia?: 'BAJA' | 'MEDIA' | 'ALTA';
 }

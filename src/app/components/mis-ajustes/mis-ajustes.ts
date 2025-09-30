@@ -59,4 +59,30 @@ export class MisAjustesComponent implements OnInit {
       default: return 'badge bg-secondary';
     }
   }
+  getDescriptionText(ajuste: any): string {
+  return ajuste.observacion || ajuste.descripcion || ajuste.ajustesSugeridos || 'Sin descripción';
+}
+
+getOriginClass(origen: string): string {
+  return `badge-${origen.toLowerCase()}`;
+}
+
+getUrgencyClass(urgencia: string): string {
+  return `urgency-${urgencia?.toLowerCase()}`;
+}
+
+getDifficultyClass(dificultad: string): string {
+  return `difficulty-${dificultad?.toLowerCase()}`;
+}
+
+getStatusIcon(estado: string): string {
+  const icons: { [key: string]: string } = {
+    'PENDIENTE': 'fa-clock',
+    'APROBADO': 'fa-check-circle',
+    'RECHAZADO': 'fa-times-circle',
+    'EN PROCESO': 'fa-spinner',
+    'COMPLETADO': 'fa-check-double'
+  };
+  return icons[estado.toUpperCase()] || 'fa-circle';
+}
 }

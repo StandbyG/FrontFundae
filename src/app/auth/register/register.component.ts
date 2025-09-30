@@ -49,7 +49,7 @@ export class RegisterComponent {
   }
   verificarTipoUsuario() {
     const correo = this.usuario.correo.toLowerCase();
-    if (correo.includes('@fundae.com.pe')) {
+    if (correo.includes('@fundades.com.pe')) {
       this.usuario.tipoUsuario = 'administrador';
     } else {
       this.usuario.tipoUsuario = 'empleador';

@@ -13,12 +13,18 @@ import { HistorialChatbotComponent } from '../components/historial-chatbot/histo
 import { AjusteRazonable } from '../core/models/ajuste-razonable.model';
 import { AjusteRazonableService } from '../services/ajuste-razonable.service';
 import { BaseChartDirective } from 'ng2-charts';
-import { Chart, ChartConfiguration, ChartType, registerables } from 'chart.js';
+import { Chart, ChartConfiguration, registerables } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { FormsModule } from '@angular/forms';
 import { Dropdown } from 'bootstrap';
 import { ThemeService } from '../services/theme.service';
-import { Subject, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs';
+import { Subject, takeUntil, forkJoin, finalize } from 'rxjs';
+import {
+  FeedbackService,
+  Feedback,
+  Notificacion,
+} from '../services/feedback.service';
+import { NotificationCenterComponent } from '../components/feedback-list/feedback-list.component';
 
 interface ChartLegendItem {
   label: string;
@@ -41,10 +47,10 @@ type FilterStatus = 'all' | 'pendiente' | 'aprobado' | 'rechazado';
     HistorialChatbotComponent,
     BaseChartDirective,
     FormsModule,
+    NotificationCenterComponent,
   ],
 })
 export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
-  // === PROPIEDADES EXISTENTES ===
   showChatbot: boolean = false;
   showHistorial: boolean = false;
   isAdmin: boolean = false;
@@ -54,36 +60,22 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   filteredAjustes: AjusteRazonable[] = [];
   openDropdown: string | null = null;
   searchTerm: string = '';
-
-  // === NUEVAS PROPIEDADES PARA MEJORAS VISUALES ===
-
-  // Navegación y UI
+  notifications: Notificacion[] = [];
+  feedbacks: Feedback[] = [];
+  loadingNotifications: boolean = false;
   navbarCollapsed: boolean = true;
-
-  // Contadores para badges
   ajustesCount: number = 0;
   notificationCount: number = 0;
   historialCount: number = 0;
-
-  // Stats para el header
   totalAjustes: number = 0;
   pendingAjustes: number = 0;
-
-  // Información del usuario
-  // Vista y filtros
   viewMode: ViewMode = 'grid';
   selectedFilter: FilterStatus = 'all';
-
-  // Chart legend data
   chartLegendData: ChartLegendItem[] = [];
-
-  // Estado de búsqueda
   isSearchFocused: boolean = false;
 
-  // Gestión de suscripciones
   private destroy$ = new Subject<void>();
 
-  // === CONFIGURACIÓN DE GRÁFICOS (EXISTENTE CON MEJORAS) ===
   public doughnutChartData: ChartConfiguration<'doughnut'>['data'] | null =
     null;
   public doughnutChartOptions: ChartConfiguration['options'] = {
@@ -91,7 +83,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        display: false, // Ocultamos la leyenda por defecto para usar una personalizada
+        display: false,
       },
       tooltip: {
         backgroundColor: 'rgba(15, 23, 42, 0.95)',
@@ -126,7 +118,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
               0
             ) as number;
             const percentage = (((value as number) / total) * 100).toFixed(0);
-            return Number(percentage) > 5 ? percentage + '%' : ''; // Solo mostrar si es > 5%
+            return Number(percentage) > 5 ? percentage + '%' : '';
           }
           return '';
         },
@@ -147,7 +139,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     private router: Router,
     public authService: AuthService,
     private ajusteService: AjusteRazonableService,
-    public themeService: ThemeService
+    public themeService: ThemeService,
+    private feedbackService: FeedbackService
   ) {
     Chart.register(...registerables);
   }
@@ -160,7 +153,15 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.initializeUserData();
     const userRole = this.authService.getRole();
+    const userId = this.authService.getUserId();
+
+    console.log('User role:', userRole);
+    console.log('User ID:', userId);
+
     this.isAdmin = userRole?.toLowerCase() === 'administrador';
+
+    console.log('Is Admin?', this.isAdmin);
+
     this.loadDashboardData();
     this.setupSearchDebouncing();
   }
@@ -179,19 +180,12 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  // === MÉTODOS DE INICIALIZACIÓN ===
-
   private initializeUserData(): void {
-    // Simular contadores (reemplazar con datos reales)
     this.notificationCount = 3;
     this.historialCount = 8;
   }
 
-  private setupSearchDebouncing(): void {
-    // Implementar búsqueda con debounce para mejor rendimiento
-    // Si tienes un FormControl para searchTerm, puedes usar:
-    // this.searchControl.valueChanges.pipe(...)
-  }
+  private setupSearchDebouncing(): void {}
 
   loadDashboardData(): void {
     this.isLoading = true;
@@ -205,6 +199,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
             this.ajustes = data;
             this.filteredAjustes = data;
             this.calculateAdminStats();
+            this.loadNotificationsAndFeedback();
             this.isLoading = false;
           },
           error: (error) => {
@@ -222,6 +217,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
             next: (data) => {
               this.ajustes = data;
               this.prepareChartData();
+              this.loadNotificationsAndFeedback();
               this.isLoading = false;
             },
             error: (error) => {
@@ -231,9 +227,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
           });
       } else {
         this.isLoading = false;
-        console.error(
-          'No se pudo obtener el ID del usuario para cargar sus ajustes.'
-        );
       }
     }
   }
@@ -246,12 +239,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.ajustesCount = this.totalAjustes;
   }
 
-  // === MÉTODOS DE FILTROS Y BÚSQUEDA ===
-
   filterAjustes(): void {
     let filtered = this.ajustes;
 
-    // Aplicar filtro de búsqueda
     const term = this.searchTerm.trim().toLowerCase();
     if (term) {
       filtered = filtered.filter((ajuste) => {
@@ -269,7 +259,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       });
     }
 
-    // Aplicar filtro de estado
     if (this.selectedFilter !== 'all') {
       filtered = filtered.filter(
         (ajuste) => ajuste.estado.toLowerCase() === this.selectedFilter
@@ -300,8 +289,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   onSearchBlur(): void {
     this.isSearchFocused = false;
   }
-
-  // === MÉTODOS DE GRÁFICOS (MEJORADOS) ===
 
   private prepareChartData(): void {
     const statusCounts = new Map<string, number>();
@@ -339,15 +326,12 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       ],
     };
 
-    // Preparar datos para la leyenda personalizada
     this.chartLegendData = labels.map((label, index) => ({
       label,
       color: colors[index],
       value: data[index],
     }));
   }
-
-  // === MÉTODOS DE UI Y NAVEGACIÓN ===
 
   trackByAjusteId(index: number, ajuste: AjusteRazonable): any {
     return ajuste.idAjuste || index;
@@ -362,19 +346,15 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getStatusIcon(estado: string): string {
-    switch (estado.toLowerCase()) {
-      case 'aprobado':
-        return 'bi-check-circle-fill';
-      case 'pendiente':
-        return 'bi-clock-fill';
-      case 'rechazado':
-        return 'bi-x-circle-fill';
-      default:
-        return 'bi-question-circle-fill';
-    }
+    const icons: { [key: string]: string } = {
+      PENDIENTE: 'bi-clock-fill',
+      APROBADO: 'bi-check-circle-fill',
+      RECHAZADO: 'bi-x-circle-fill',
+      'EN PROCESO': 'bi-arrow-repeat',
+      COMPLETADO: 'bi-check-circle-fill',
+    };
+    return icons[estado?.toUpperCase()] || 'bi-circle-fill';
   }
-
-  // === MÉTODOS EXISTENTES (SIN CAMBIOS IMPORTANTES) ===
 
   getStatusClass(estado: string): string {
     switch (estado.toLowerCase()) {
@@ -389,7 +369,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  // Métodos de navegación (existentes)
   navigateToCreateAjuste(): void {
     this.router.navigate(['/ajustes/create']);
   }
@@ -429,10 +408,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.router.navigate(['/admin/usuarios']);
   }
 
-  // Métodos de UI (existentes con pequeñas mejoras)
   toggleChatbot(): void {
     this.showChatbot = !this.showChatbot;
-    // Cerrar historial si se abre chatbot
     if (this.showChatbot) {
       this.showHistorial = false;
     }
@@ -440,7 +417,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   toggleHistorial(): void {
     this.showHistorial = !this.showHistorial;
-    // Cerrar chatbot si se abre historial
     if (this.showHistorial) {
       this.showChatbot = false;
     }
@@ -457,14 +433,12 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   toggleUserMenu(event: MouseEvent): void {
     event.preventDefault();
     this.userMenuOpen = !this.userMenuOpen;
-    // Cerrar otros dropdowns
     this.openDropdown = null;
   }
 
   toggleDropdown(menu: string, event: MouseEvent): void {
     event.preventDefault();
     this.openDropdown = this.openDropdown === menu ? null : menu;
-    // Cerrar menú de usuario
     this.userMenuOpen = false;
   }
 
@@ -479,12 +453,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any): void {
-    // Cerrar menús en resize para evitar problemas de responsive
     this.userMenuOpen = false;
     this.openDropdown = null;
   }
-
-  // === MÉTODOS AUXILIARES PARA EL TEMPLATE ===
 
   get hasAjustes(): boolean {
     return this.ajustes && this.ajustes.length > 0;
@@ -496,5 +467,99 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   get isSearching(): boolean {
     return this.searchTerm.trim().length > 0;
+  }
+
+  getApprovedCount(): number {
+    return this.ajustes.filter((a) => a.estado?.toLowerCase() === 'aprobado')
+      .length;
+  }
+
+  getPendingCount(): number {
+    return this.ajustes.filter((a) => a.estado?.toLowerCase() === 'pendiente')
+      .length;
+  }
+
+  private loadNotificationsAndFeedback(): void {
+    this.loadingNotifications = true;
+
+    forkJoin({
+      notifications: this.feedbackService.obtenerNotificaciones(false, 0, 20),
+      feedbacks: this.feedbackService.obtenerFeedbacks(0, 20, true),
+    })
+      .pipe(
+        takeUntil(this.destroy$),
+        finalize(() => (this.loadingNotifications = false))
+      )
+      .subscribe({
+        next: (response) => {
+          console.log('Raw response:', response);
+
+          this.notifications = response.notifications?.content || [];
+          this.feedbacks = response.feedbacks?.content || [];
+
+          console.log('Notifications loaded:', this.notifications);
+          console.log('Feedbacks loaded:', this.feedbacks);
+
+          this.updateNotificationCount();
+        },
+        error: (error) => {
+          console.error('Error loading notifications and feedback:', error);
+        },
+      });
+  }
+
+  onNotificationRead(id: number): void {
+    this.feedbackService
+      .marcarNotificacionLeida(id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          const notification = this.notifications.find((n) => n.id === id);
+          if (notification) notification.leido = true;
+
+          const feedback = this.feedbacks.find((f) => f.id === id);
+          if (feedback) feedback.visibleEmpleador = true;
+
+          this.updateNotificationCount();
+        },
+        error: (error) =>
+          console.error('Error marking notification as read:', error),
+      });
+  }
+
+  onNotificationDeleted(id: number): void {
+    this.notifications = this.notifications.filter((n) => n.id !== id);
+    this.feedbacks = this.feedbacks.filter((f) => f.id !== id);
+    this.updateNotificationCount();
+  }
+
+  refreshNotifications(): void {
+    this.loadNotificationsAndFeedback();
+  }
+
+  viewNotificationDetails(item: any): void {
+    if (item.ajusteId) {
+      this.router.navigate(['/ajustes', item.ajusteId]);
+    }
+  }
+
+  private updateNotificationCount(): void {
+    const unreadNotifications = this.notifications.filter(
+      (n) => !n.leido
+    ).length;
+    const unreadFeedbacks = this.feedbacks.filter(
+      (f) => !f.visibleEmpleador
+    ).length;
+    this.historialCount = unreadNotifications + unreadFeedbacks;
+  }
+
+  getUnreadNotificationsCount(): number {
+    const unreadNotifications = this.notifications.filter(
+      (n) => !n.leido
+    ).length;
+    const unreadFeedbacks = this.feedbacks.filter(
+      (f) => !f.visibleEmpleador
+    ).length;
+    return unreadNotifications + unreadFeedbacks;
   }
 }

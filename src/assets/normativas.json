@@ -1,0 +1,937 @@
+[
+  {
+    "label": "Norma A120 — 10A",
+    "fuente": "Norma A120",
+    "ref": "10A"
+  },
+  {
+    "label": "Norma A120 — 10B",
+    "fuente": "Norma A120",
+    "ref": "10B"
+  },
+  {
+    "label": "Norma A120 — 11A",
+    "fuente": "Norma A120",
+    "ref": "11A"
+  },
+  {
+    "label": "Norma A120 — 11B",
+    "fuente": "Norma A120",
+    "ref": "11B"
+  },
+  {
+    "label": "Norma A120 — 11C",
+    "fuente": "Norma A120",
+    "ref": "11C"
+  },
+  {
+    "label": "Norma A120 — 11D",
+    "fuente": "Norma A120",
+    "ref": "11D"
+  },
+  {
+    "label": "Norma A120 — 11E",
+    "fuente": "Norma A120",
+    "ref": "11E"
+  },
+  {
+    "label": "Norma A120 — 11F",
+    "fuente": "Norma A120",
+    "ref": "11F"
+  },
+  {
+    "label": "Norma A120 — 11G",
+    "fuente": "Norma A120",
+    "ref": "11G"
+  },
+  {
+    "label": "Norma A120 — 11H",
+    "fuente": "Norma A120",
+    "ref": "11H"
+  },
+  {
+    "label": "Norma A120 — 11I",
+    "fuente": "Norma A120",
+    "ref": "11I"
+  },
+  {
+    "label": "Norma A120 — 11J",
+    "fuente": "Norma A120",
+    "ref": "11J"
+  },
+  {
+    "label": "Norma A120 — 11K",
+    "fuente": "Norma A120",
+    "ref": "11K"
+  },
+  {
+    "label": "Norma A120 — 12A",
+    "fuente": "Norma A120",
+    "ref": "12A"
+  },
+  {
+    "label": "Norma A120 — 12C",
+    "fuente": "Norma A120",
+    "ref": "12C"
+  },
+  {
+    "label": "Norma A120 — 12D",
+    "fuente": "Norma A120",
+    "ref": "12D"
+  },
+  {
+    "label": "Norma A120 — 13A",
+    "fuente": "Norma A120",
+    "ref": "13A"
+  },
+  {
+    "label": "Norma A120 — 13B",
+    "fuente": "Norma A120",
+    "ref": "13B"
+  },
+  {
+    "label": "Norma A120 — 13C",
+    "fuente": "Norma A120",
+    "ref": "13C"
+  },
+  {
+    "label": "Norma A120 — 14A",
+    "fuente": "Norma A120",
+    "ref": "14A"
+  },
+  {
+    "label": "Norma A120 — 14B",
+    "fuente": "Norma A120",
+    "ref": "14B"
+  },
+  {
+    "label": "Norma A120 — 14C",
+    "fuente": "Norma A120",
+    "ref": "14C"
+  },
+  {
+    "label": "Norma A120 — 14D",
+    "fuente": "Norma A120",
+    "ref": "14D"
+  },
+  {
+    "label": "Norma A120 — 14E",
+    "fuente": "Norma A120",
+    "ref": "14E"
+  },
+  {
+    "label": "Norma A120 — 15A",
+    "fuente": "Norma A120",
+    "ref": "15A"
+  },
+  {
+    "label": "Norma A120 — 15B",
+    "fuente": "Norma A120",
+    "ref": "15B"
+  },
+  {
+    "label": "Norma A120 — 15C",
+    "fuente": "Norma A120",
+    "ref": "15C"
+  },
+  {
+    "label": "Norma A120 — 15D",
+    "fuente": "Norma A120",
+    "ref": "15D"
+  },
+  {
+    "label": "Norma A120 — 15E",
+    "fuente": "Norma A120",
+    "ref": "15E"
+  },
+  {
+    "label": "Norma A120 — 15F",
+    "fuente": "Norma A120",
+    "ref": "15F"
+  },
+  {
+    "label": "Norma A120 — 16A",
+    "fuente": "Norma A120",
+    "ref": "16A"
+  },
+  {
+    "label": "Norma A120 — 16B",
+    "fuente": "Norma A120",
+    "ref": "16B"
+  },
+  {
+    "label": "Norma A120 — 16C",
+    "fuente": "Norma A120",
+    "ref": "16C"
+  },
+  {
+    "label": "Norma A120 — 16D",
+    "fuente": "Norma A120",
+    "ref": "16D"
+  },
+  {
+    "label": "Norma A120 — 16E",
+    "fuente": "Norma A120",
+    "ref": "16E"
+  },
+  {
+    "label": "Norma A120 — 17A",
+    "fuente": "Norma A120",
+    "ref": "17A"
+  },
+  {
+    "label": "Norma A120 — 17B",
+    "fuente": "Norma A120",
+    "ref": "17B"
+  },
+  {
+    "label": "Norma A120 — 17C",
+    "fuente": "Norma A120",
+    "ref": "17C"
+  },
+  {
+    "label": "Norma A120 — 17E",
+    "fuente": "Norma A120",
+    "ref": "17E"
+  },
+  {
+    "label": "Norma A120 — 17F",
+    "fuente": "Norma A120",
+    "ref": "17F"
+  },
+  {
+    "label": "Norma A120 — 18A",
+    "fuente": "Norma A120",
+    "ref": "18A"
+  },
+  {
+    "label": "Norma A120 — 18C",
+    "fuente": "Norma A120",
+    "ref": "18C"
+  },
+  {
+    "label": "Norma A120 — 18E",
+    "fuente": "Norma A120",
+    "ref": "18E"
+  },
+  {
+    "label": "Norma A120 — 18F",
+    "fuente": "Norma A120",
+    "ref": "18F"
+  },
+  {
+    "label": "Norma A120 — 18G",
+    "fuente": "Norma A120",
+    "ref": "18G"
+  },
+  {
+    "label": "Norma A120 — 18I",
+    "fuente": "Norma A120",
+    "ref": "18I"
+  },
+  {
+    "label": "Norma A120 — 19A",
+    "fuente": "Norma A120",
+    "ref": "19A"
+  },
+  {
+    "label": "Norma A120 — 21A",
+    "fuente": "Norma A120",
+    "ref": "21A"
+  },
+  {
+    "label": "Norma A120 — 21B",
+    "fuente": "Norma A120",
+    "ref": "21B"
+  },
+  {
+    "label": "Norma A120 — 21C",
+    "fuente": "Norma A120",
+    "ref": "21C"
+  },
+  {
+    "label": "Norma A120 — 21D",
+    "fuente": "Norma A120",
+    "ref": "21D"
+  },
+  {
+    "label": "Norma A120 — 21E",
+    "fuente": "Norma A120",
+    "ref": "21E"
+  },
+  {
+    "label": "Norma A120 — 22A",
+    "fuente": "Norma A120",
+    "ref": "22A"
+  },
+  {
+    "label": "Norma A120 — 23A",
+    "fuente": "Norma A120",
+    "ref": "23A"
+  },
+  {
+    "label": "Norma A120 — 23B",
+    "fuente": "Norma A120",
+    "ref": "23B"
+  },
+  {
+    "label": "Norma A120 — 23C",
+    "fuente": "Norma A120",
+    "ref": "23C"
+  },
+  {
+    "label": "Norma A120 — 23D",
+    "fuente": "Norma A120",
+    "ref": "23D"
+  },
+  {
+    "label": "Norma A120 — 24A",
+    "fuente": "Norma A120",
+    "ref": "24A"
+  },
+  {
+    "label": "Norma A120 — 24B",
+    "fuente": "Norma A120",
+    "ref": "24B"
+  },
+  {
+    "label": "Norma A120 — 24C",
+    "fuente": "Norma A120",
+    "ref": "24C"
+  },
+  {
+    "label": "Norma A120 — 24D",
+    "fuente": "Norma A120",
+    "ref": "24D"
+  },
+  {
+    "label": "Norma A120 — 24E",
+    "fuente": "Norma A120",
+    "ref": "24E"
+  },
+  {
+    "label": "Norma A120 — 24F",
+    "fuente": "Norma A120",
+    "ref": "24F"
+  },
+  {
+    "label": "Norma A120 — 30A",
+    "fuente": "Norma A120",
+    "ref": "30A"
+  },
+  {
+    "label": "Norma A120 — 30B",
+    "fuente": "Norma A120",
+    "ref": "30B"
+  },
+  {
+    "label": "Norma A120 — 30C",
+    "fuente": "Norma A120",
+    "ref": "30C"
+  },
+  {
+    "label": "Norma A120 — 4A",
+    "fuente": "Norma A120",
+    "ref": "4A"
+  },
+  {
+    "label": "Norma A120 — 4B",
+    "fuente": "Norma A120",
+    "ref": "4B"
+  },
+  {
+    "label": "Norma A120 — 4C",
+    "fuente": "Norma A120",
+    "ref": "4C"
+  },
+  {
+    "label": "Norma A120 — 4D",
+    "fuente": "Norma A120",
+    "ref": "4D"
+  },
+  {
+    "label": "Norma A120 — 5A",
+    "fuente": "Norma A120",
+    "ref": "5A"
+  },
+  {
+    "label": "Norma A120 — 5B",
+    "fuente": "Norma A120",
+    "ref": "5B"
+  },
+  {
+    "label": "Norma A120 — 5C",
+    "fuente": "Norma A120",
+    "ref": "5C"
+  },
+  {
+    "label": "Norma A120 — 5D",
+    "fuente": "Norma A120",
+    "ref": "5D"
+  },
+  {
+    "label": "Norma A120 — 5E",
+    "fuente": "Norma A120",
+    "ref": "5E"
+  },
+  {
+    "label": "Norma A120 — 5F",
+    "fuente": "Norma A120",
+    "ref": "5F"
+  },
+  {
+    "label": "Norma A120 — 5G",
+    "fuente": "Norma A120",
+    "ref": "5G"
+  },
+  {
+    "label": "Norma A120 — 5H",
+    "fuente": "Norma A120",
+    "ref": "5H"
+  },
+  {
+    "label": "Norma A120 — 5I",
+    "fuente": "Norma A120",
+    "ref": "5I"
+  },
+  {
+    "label": "Norma A120 — 5J",
+    "fuente": "Norma A120",
+    "ref": "5J"
+  },
+  {
+    "label": "Norma A120 — 5K",
+    "fuente": "Norma A120",
+    "ref": "5K"
+  },
+  {
+    "label": "Norma A120 — 5L",
+    "fuente": "Norma A120",
+    "ref": "5L"
+  },
+  {
+    "label": "Norma A120 — 6A",
+    "fuente": "Norma A120",
+    "ref": "6A"
+  },
+  {
+    "label": "Norma A120 — 6B",
+    "fuente": "Norma A120",
+    "ref": "6B"
+  },
+  {
+    "label": "Norma A120 — 6C",
+    "fuente": "Norma A120",
+    "ref": "6C"
+  },
+  {
+    "label": "Norma A120 — 6D",
+    "fuente": "Norma A120",
+    "ref": "6D"
+  },
+  {
+    "label": "Norma A120 — 6E",
+    "fuente": "Norma A120",
+    "ref": "6E"
+  },
+  {
+    "label": "Norma A120 — 6G",
+    "fuente": "Norma A120",
+    "ref": "6G"
+  },
+  {
+    "label": "Norma A120 — 6H",
+    "fuente": "Norma A120",
+    "ref": "6H"
+  },
+  {
+    "label": "Norma A120 — 6I",
+    "fuente": "Norma A120",
+    "ref": "6I"
+  },
+  {
+    "label": "Norma A120 — 7A",
+    "fuente": "Norma A120",
+    "ref": "7A"
+  },
+  {
+    "label": "Norma A120 — 7B",
+    "fuente": "Norma A120",
+    "ref": "7B"
+  },
+  {
+    "label": "Norma A120 — 7C",
+    "fuente": "Norma A120",
+    "ref": "7C"
+  },
+  {
+    "label": "Norma A120 — 7D",
+    "fuente": "Norma A120",
+    "ref": "7D"
+  },
+  {
+    "label": "Norma A120 — 8A",
+    "fuente": "Norma A120",
+    "ref": "8A"
+  },
+  {
+    "label": "Norma A120 — 8B",
+    "fuente": "Norma A120",
+    "ref": "8B"
+  },
+  {
+    "label": "Norma A120 — 8C",
+    "fuente": "Norma A120",
+    "ref": "8C"
+  },
+  {
+    "label": "Norma A120 — 8D",
+    "fuente": "Norma A120",
+    "ref": "8D"
+  },
+  {
+    "label": "Norma A120 — 8E",
+    "fuente": "Norma A120",
+    "ref": "8E"
+  },
+  {
+    "label": "Norma A120 — 8F",
+    "fuente": "Norma A120",
+    "ref": "8F"
+  },
+  {
+    "label": "Norma A120 — 8G",
+    "fuente": "Norma A120",
+    "ref": "8G"
+  },
+  {
+    "label": "Norma A120 — 8H",
+    "fuente": "Norma A120",
+    "ref": "8H"
+  },
+  {
+    "label": "Norma A120 — 8I",
+    "fuente": "Norma A120",
+    "ref": "8I"
+  },
+  {
+    "label": "Norma A120 — 8K",
+    "fuente": "Norma A120",
+    "ref": "8K"
+  },
+  {
+    "label": "Norma A120 — 8L",
+    "fuente": "Norma A120",
+    "ref": "8L"
+  },
+  {
+    "label": "Norma A120 — 9A",
+    "fuente": "Norma A120",
+    "ref": "9A"
+  },
+  {
+    "label": "Norma A120 — 9B",
+    "fuente": "Norma A120",
+    "ref": "9B"
+  },
+  {
+    "label": "Norma A120 — 9C",
+    "fuente": "Norma A120",
+    "ref": "9C"
+  },
+  {
+    "label": "Norma A120 — 9D",
+    "fuente": "Norma A120",
+    "ref": "9D"
+  },
+  {
+    "label": "Norma ISO — 1",
+    "fuente": "Norma ISO",
+    "ref": "1"
+  },
+  {
+    "label": "Norma ISO — 2025-01-03 00:00:00",
+    "fuente": "Norma ISO",
+    "ref": "2025-01-03 00:00:00"
+  },
+  {
+    "label": "Norma ISO — 2025-01-04 00:00:00",
+    "fuente": "Norma ISO",
+    "ref": "2025-01-04 00:00:00"
+  },
+  {
+    "label": "Norma ISO — 2025-02-03 00:00:00",
+    "fuente": "Norma ISO",
+    "ref": "2025-02-03 00:00:00"
+  },
+  {
+    "label": "Norma ISO — 2025-02-04 00:00:00",
+    "fuente": "Norma ISO",
+    "ref": "2025-02-04 00:00:00"
+  },
+  {
+    "label": "Norma ISO — 2025-03-03 00:00:00",
+    "fuente": "Norma ISO",
+    "ref": "2025-03-03 00:00:00"
+  },
+  {
+    "label": "Norma ISO — 2025-03-04 00:00:00",
+    "fuente": "Norma ISO",
+    "ref": "2025-03-04 00:00:00"
+  },
+  {
+    "label": "Norma ISO — 2025-04-04 00:00:00",
+    "fuente": "Norma ISO",
+    "ref": "2025-04-04 00:00:00"
+  },
+  {
+    "label": "Norma ISO — 2025-05-03 00:00:00",
+    "fuente": "Norma ISO",
+    "ref": "2025-05-03 00:00:00"
+  },
+  {
+    "label": "Norma ISO — 2025-05-04 00:00:00",
+    "fuente": "Norma ISO",
+    "ref": "2025-05-04 00:00:00"
+  },
+  {
+    "label": "Norma ISO — 2025-05-05 00:00:00",
+    "fuente": "Norma ISO",
+    "ref": "2025-05-05 00:00:00"
+  },
+  {
+    "label": "Norma ISO — 2025-06-03 00:00:00",
+    "fuente": "Norma ISO",
+    "ref": "2025-06-03 00:00:00"
+  },
+  {
+    "label": "Norma ISO — 2025-06-04 00:00:00",
+    "fuente": "Norma ISO",
+    "ref": "2025-06-04 00:00:00"
+  },
+  {
+    "label": "Norma ISO — 2025-07-03 00:00:00",
+    "fuente": "Norma ISO",
+    "ref": "2025-07-03 00:00:00"
+  },
+  {
+    "label": "Norma ISO — 2025-07-04 00:00:00",
+    "fuente": "Norma ISO",
+    "ref": "2025-07-04 00:00:00"
+  },
+  {
+    "label": "Norma ISO — 2025-08-03 00:00:00",
+    "fuente": "Norma ISO",
+    "ref": "2025-08-03 00:00:00"
+  },
+  {
+    "label": "Norma ISO — 2025-08-04 00:00:00",
+    "fuente": "Norma ISO",
+    "ref": "2025-08-04 00:00:00"
+  },
+  {
+    "label": "Norma ISO — 2025-09-03 00:00:00",
+    "fuente": "Norma ISO",
+    "ref": "2025-09-03 00:00:00"
+  },
+  {
+    "label": "Norma ISO — 2025-10-03 00:00:00",
+    "fuente": "Norma ISO",
+    "ref": "2025-10-03 00:00:00"
+  },
+  {
+    "label": "Norma ISO — 2025-11-03 00:00:00",
+    "fuente": "Norma ISO",
+    "ref": "2025-11-03 00:00:00"
+  },
+  {
+    "label": "Norma ISO — 2025-12-03 00:00:00",
+    "fuente": "Norma ISO",
+    "ref": "2025-12-03 00:00:00"
+  },
+  {
+    "label": "Norma ISO — 3.13",
+    "fuente": "Norma ISO",
+    "ref": "3.13"
+  },
+  {
+    "label": "Norma ISO — 3.14",
+    "fuente": "Norma ISO",
+    "ref": "3.14"
+  },
+  {
+    "label": "Norma ISO — 3.16",
+    "fuente": "Norma ISO",
+    "ref": "3.16"
+  },
+  {
+    "label": "Norma ISO — 3.17",
+    "fuente": "Norma ISO",
+    "ref": "3.17"
+  },
+  {
+    "label": "Norma ISO — 3.19",
+    "fuente": "Norma ISO",
+    "ref": "3.19"
+  },
+  {
+    "label": "Norma ISO — 3.20",
+    "fuente": "Norma ISO",
+    "ref": "3.20"
+  },
+  {
+    "label": "Norma ISO — 3.21",
+    "fuente": "Norma ISO",
+    "ref": "3.21"
+  },
+  {
+    "label": "Norma ISO — 3.22",
+    "fuente": "Norma ISO",
+    "ref": "3.22"
+  },
+  {
+    "label": "Norma ISO — 3.23",
+    "fuente": "Norma ISO",
+    "ref": "3.23"
+  },
+  {
+    "label": "Norma ISO — 3.24",
+    "fuente": "Norma ISO",
+    "ref": "3.24"
+  },
+  {
+    "label": "Norma ISO — 3.25",
+    "fuente": "Norma ISO",
+    "ref": "3.25"
+  },
+  {
+    "label": "Norma ISO — 3.26",
+    "fuente": "Norma ISO",
+    "ref": "3.26"
+  },
+  {
+    "label": "Norma ISO — 3.27",
+    "fuente": "Norma ISO",
+    "ref": "3.27"
+  },
+  {
+    "label": "Norma ISO — 3.28",
+    "fuente": "Norma ISO",
+    "ref": "3.28"
+  },
+  {
+    "label": "Norma ISO — 3.29",
+    "fuente": "Norma ISO",
+    "ref": "3.29"
+  },
+  {
+    "label": "Norma ISO — 3.30",
+    "fuente": "Norma ISO",
+    "ref": "3.30"
+  },
+  {
+    "label": "Norma ISO — 3.31",
+    "fuente": "Norma ISO",
+    "ref": "3.31"
+  },
+  {
+    "label": "Norma ISO — 3.32",
+    "fuente": "Norma ISO",
+    "ref": "3.32"
+  },
+  {
+    "label": "Norma ISO — 3.33",
+    "fuente": "Norma ISO",
+    "ref": "3.33"
+  },
+  {
+    "label": "Norma ISO — 3.34",
+    "fuente": "Norma ISO",
+    "ref": "3.34"
+  },
+  {
+    "label": "Norma ISO — 3.35",
+    "fuente": "Norma ISO",
+    "ref": "3.35"
+  },
+  {
+    "label": "Norma ISO — 3.36",
+    "fuente": "Norma ISO",
+    "ref": "3.36"
+  },
+  {
+    "label": "Norma ISO — 3.39",
+    "fuente": "Norma ISO",
+    "ref": "3.39"
+  },
+  {
+    "label": "Norma ISO — 3.40",
+    "fuente": "Norma ISO",
+    "ref": "3.40"
+  },
+  {
+    "label": "Norma ISO — 3.41",
+    "fuente": "Norma ISO",
+    "ref": "3.41"
+  },
+  {
+    "label": "Norma ISO — 3.42",
+    "fuente": "Norma ISO",
+    "ref": "3.42"
+  },
+  {
+    "label": "Norma ISO — 3.43",
+    "fuente": "Norma ISO",
+    "ref": "3.43"
+  },
+  {
+    "label": "Norma ISO — 5.2. 1",
+    "fuente": "Norma ISO",
+    "ref": "5.2. 1"
+  },
+  {
+    "label": "Norma ISO — 5.2. 10",
+    "fuente": "Norma ISO",
+    "ref": "5.2. 10"
+  },
+  {
+    "label": "Norma ISO — 5.2. 11",
+    "fuente": "Norma ISO",
+    "ref": "5.2. 11"
+  },
+  {
+    "label": "Norma ISO — 5.2. 12",
+    "fuente": "Norma ISO",
+    "ref": "5.2. 12"
+  },
+  {
+    "label": "Norma ISO — 5.2. 2",
+    "fuente": "Norma ISO",
+    "ref": "5.2. 2"
+  },
+  {
+    "label": "Norma ISO — 5.2. 3",
+    "fuente": "Norma ISO",
+    "ref": "5.2. 3"
+  },
+  {
+    "label": "Norma ISO — 5.2. 4",
+    "fuente": "Norma ISO",
+    "ref": "5.2. 4"
+  },
+  {
+    "label": "Norma ISO — 5.2. 5",
+    "fuente": "Norma ISO",
+    "ref": "5.2. 5"
+  },
+  {
+    "label": "Norma ISO — 5.2. 6",
+    "fuente": "Norma ISO",
+    "ref": "5.2. 6"
+  },
+  {
+    "label": "Norma ISO — 5.2. 7",
+    "fuente": "Norma ISO",
+    "ref": "5.2. 7"
+  },
+  {
+    "label": "Norma ISO — 5.2. 8.1",
+    "fuente": "Norma ISO",
+    "ref": "5.2. 8.1"
+  },
+  {
+    "label": "Norma ISO — 5.2. 8.2",
+    "fuente": "Norma ISO",
+    "ref": "5.2. 8.2"
+  },
+  {
+    "label": "Norma ISO — 5.2. 8.3",
+    "fuente": "Norma ISO",
+    "ref": "5.2. 8.3"
+  },
+  {
+    "label": "Norma ISO — 5.2. 8.4",
+    "fuente": "Norma ISO",
+    "ref": "5.2. 8.4"
+  },
+  {
+    "label": "Norma ISO — 5.2. 9",
+    "fuente": "Norma ISO",
+    "ref": "5.2. 9"
+  },
+  {
+    "label": "Norma ISO — 5.3. 1",
+    "fuente": "Norma ISO",
+    "ref": "5.3. 1"
+  },
+  {
+    "label": "Norma ISO — 5.3. 2",
+    "fuente": "Norma ISO",
+    "ref": "5.3. 2"
+  },
+  {
+    "label": "Norma ISO — 5.3. 3",
+    "fuente": "Norma ISO",
+    "ref": "5.3. 3"
+  },
+  {
+    "label": "Norma ISO — 5.3. 4",
+    "fuente": "Norma ISO",
+    "ref": "5.3. 4"
+  },
+  {
+    "label": "Norma ISO — 5.3. 5",
+    "fuente": "Norma ISO",
+    "ref": "5.3. 5"
+  },
+  {
+    "label": "Norma ISO — 5.3. 6",
+    "fuente": "Norma ISO",
+    "ref": "5.3. 6"
+  },
+  {
+    "label": "Norma ISO — 5.3. 7",
+    "fuente": "Norma ISO",
+    "ref": "5.3. 7"
+  },
+  {
+    "label": "Norma ISO — 5.3. 8",
+    "fuente": "Norma ISO",
+    "ref": "5.3. 8"
+  },
+  {
+    "label": "Norma ISO — 5.3. 9",
+    "fuente": "Norma ISO",
+    "ref": "5.3. 9"
+  },
+  {
+    "label": "Norma ISO — 5.4. 1",
+    "fuente": "Norma ISO",
+    "ref": "5.4. 1"
+  },
+  {
+    "label": "Norma ISO — 5.4. 3",
+    "fuente": "Norma ISO",
+    "ref": "5.4. 3"
+  },
+  {
+    "label": "Norma ISO — 5.4. 4",
+    "fuente": "Norma ISO",
+    "ref": "5.4. 4"
+  },
+  {
+    "label": "Norma ISO — 5.4. 5",
+    "fuente": "Norma ISO",
+    "ref": "5.4. 5"
+  },
+  {
+    "label": "Norma ISO — 5.4. 6",
+    "fuente": "Norma ISO",
+    "ref": "5.4. 6"
+  },
+  {
+    "label": "Norma ISO — 5.4. 7",
+    "fuente": "Norma ISO",
+    "ref": "5.4. 7"
+  }
+]

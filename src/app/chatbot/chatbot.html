@@ -1,36 +1,115 @@
-<div class="chatbot-container">
+
+<div class="chatbot-wrapper">
   <!-- Header -->
   <div class="chatbot-header">
-    <div class="header-left">
-      <img src="assets/icons/roboamigo.svg" alt="Bot" class="header-avatar" />
-      <div>
-        <h2>ROBOAMIGO</h2>
-        <p>Tu asistente virtual</p>
+    <div class="header-content">
+      <div class="bot-avatar">
+        <img src="assets/icons/roboamigo.svg" alt="RoboAmigo" />
+      </div>
+      <div class="header-info">
+        <h3 class="bot-name">RoboAmigo</h3>
+        <div class="bot-status">
+          <span class="status-indicator"></span>
+          <span class="status-text">En línea</span>
+        </div>
       </div>
     </div>
-    <button class="close-btn" (click)="closeChatbot()">✖</button>
-  </div>
-
-  <!-- Mensajes -->
-  <div class="chatbot-messages">
-    <div *ngFor="let message of messages" class="message fade-in">
-      <div class="user-message">
-        <div class="message-bubble user-bubble">{{ message.user }}</div>
-        <img src="assets/icons/user.svg" alt="Usuario" class="avatar" />
-      </div>
-
-      <div class="bot-response">
-        <img src="assets/icons/roboamigo.svg" alt="Bot" class="avatar" />
-        <div class="message-bubble bot-bubble">{{ message.bot }}</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Input -->
-  <div class="input-container">
-    <input [(ngModel)]="userMessage" placeholder="Escribe un mensaje..." />
-    <button (click)="sendMessage()">
-      <span class="send-icon">➤</span>
+    <button class="btn-close-chat" (click)="closeChatbot()" aria-label="Cerrar chat">
+      <i class="bi bi-x-lg"></i>
     </button>
+  </div>
+
+  <!-- Messages Area -->
+  <div class="chatbot-messages" #messagesContainer>
+    <!-- Welcome Message -->
+    <div class="welcome-message" *ngIf="messages.length === 0">
+      <div class="welcome-icon">
+        <i class="bi bi-chat-heart"></i>
+      </div>
+      <h4>¡Hola! Soy RoboAmigo</h4>
+      <p>Estoy aquí para ayudarte con información sobre ajustes razonables y accesibilidad.</p>
+      <div class="quick-actions">
+        <button class="quick-btn" (click)="sendQuickMessage('¿Qué son los ajustes razonables?')">
+          <i class="bi bi-question-circle"></i>
+          <span>¿Qué son los ajustes razonables?</span>
+        </button>
+        <button class="quick-btn" (click)="sendQuickMessage('¿Cómo solicito un ajuste?')">
+          <i class="bi bi-file-text"></i>
+          <span>¿Cómo solicito un ajuste?</span>
+        </button>
+        <button class="quick-btn" (click)="sendQuickMessage('Necesito ayuda')">
+          <i class="bi bi-life-preserver"></i>
+          <span>Necesito ayuda</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Conversation Messages -->
+    <div class="message-group" *ngFor="let message of messages; let i = index" [@fadeIn]>
+      <!-- User Message -->
+      <div class="message message-user">
+        <div class="message-content">
+          <div class="message-bubble user-bubble">
+            <p>{{ message.user }}</p>
+          </div>
+          <div class="message-avatar user-avatar">
+            <i class="bi bi-person-fill"></i>
+          </div>
+        </div>
+        <div class="message-time">
+          {{ getCurrentTime() }}
+        </div>
+      </div>
+
+      <!-- Bot Message -->
+      <div class="message message-bot">
+        <div class="message-content">
+          <div class="message-avatar bot-avatar">
+            <img src="assets/icons/roboamigo.svg" alt="Bot" />
+          </div>
+          <div class="message-bubble bot-bubble">
+            <div *ngIf="message.bot === '...'" class="typing-indicator">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <p *ngIf="message.bot !== '...'">{{ message.bot }}</p>
+          </div>
+        </div>
+        <div class="message-time" *ngIf="message.bot !== '...'">
+          {{ getCurrentTime() }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Input Area -->
+  <div class="chatbot-input">
+    <div class="input-wrapper">
+      <button class="btn-attachment" type="button" aria-label="Adjuntar archivo">
+        <i class="bi bi-paperclip"></i>
+      </button>
+      <input
+        type="text"
+        class="message-input"
+        [(ngModel)]="userMessage"
+        (keyup.enter)="sendMessage()"
+        placeholder="Escribe tu mensaje..."
+        aria-label="Mensaje"
+        [disabled]="isTyping"
+      />
+      <button
+        class="btn-send"
+        type="button"
+        (click)="sendMessage()"
+        [disabled]="!userMessage.trim() || isTyping"
+        aria-label="Enviar mensaje"
+      >
+        <i class="bi bi-send-fill"></i>
+      </button>
+    </div>
+    <div class="input-footer">
+      <span class="footer-text">Presiona Enter para enviar</span>
+    </div>
   </div>
 </div>

@@ -1,0 +1,228 @@
+<div class="page">
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <header class="page__header">
+      <div class="page__title">
+        <h1>Ajuste razonable (ONG)</h1>
+        <p>
+          Registra recomendaciones dirigidas a empleadores con referencia
+          normativa estandarizada.
+        </p>
+      </div>
+      <div class="page__actions">
+        <button type="button" class="btn btn--ghost" [disabled]="isSaving()">
+          Cancelar
+        </button>
+        <button
+          type="submit"
+          class="btn btn--primary"
+          [disabled]="isSaving() || !usuarioId || form.invalid"
+        >
+          <span class="spinner" *ngIf="isSaving()"></span>
+          Guardar
+        </button>
+      </div>
+    </header>
+
+    <section class="card">
+      <h2 class="card__title">Destinatario</h2>
+      <div class="grid grid--2">
+        <div>
+          <label class="fld">
+            <span class="fld__label"
+              >Usuario empleador <span class="req">*</span></span
+            >
+            <app-user-select
+              [(value)]="usuarioId"
+              (userChange)="onUser($event)"
+            >
+            </app-user-select>
+          </label>
+          <small class="hint" *ngIf="!usuarioId"
+            >Selecciona el empleador al que va dirigido el ajuste.</small
+          >
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 class="card__title">Detalle del ajuste</h2>
+      <div class="grid grid--2-1">
+        <label class="fld">
+          <span class="fld__label">Espacio</span>
+          <input
+            class="fld__control"
+            formControlName="espacio"
+            placeholder="Ej. Circulación, Acceso, Sanitarios…"
+          />
+        </label>
+
+        <div class="pills">
+          <div class="pills__group">
+            <div class="pills__label">Dificultad</div>
+            <div class="pills__set" role="group" aria-label="Dificultad">
+              <button
+                type="button"
+                class="pill"
+                [class.is-active]="form.value.dificultad === 'BAJA'"
+                (click)="setDificultad('BAJA')"
+              >
+                Baja
+              </button>
+              <button
+                type="button"
+                class="pill"
+                [class.is-active]="form.value.dificultad === 'MEDIA'"
+                (click)="setDificultad('MEDIA')"
+              >
+                Media
+              </button>
+              <button
+                type="button"
+                class="pill"
+                [class.is-active]="form.value.dificultad === 'ALTA'"
+                (click)="setDificultad('ALTA')"
+              >
+                Alta
+              </button>
+            </div>
+          </div>
+          <div class="pills__group">
+            <div class="pills__label">Urgencia</div>
+            <div class="pills__set" role="group" aria-label="Urgencia">
+              <button
+                type="button"
+                class="pill"
+                [class.is-active]="form.value.urgencia === 'BAJA'"
+                (click)="setUrgencia('BAJA')"
+              >
+                Baja
+              </button>
+              <button
+                type="button"
+                class="pill"
+                [class.is-active]="form.value.urgencia === 'MEDIA'"
+                (click)="setUrgencia('MEDIA')"
+              >
+                Media
+              </button>
+              <button
+                type="button"
+                class="pill"
+                [class.is-active]="form.value.urgencia === 'ALTA'"
+                (click)="setUrgencia('ALTA')"
+              >
+                Alta
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <label class="fld">
+        <span class="fld__label">Observación <span class="req">*</span></span>
+        <textarea
+          class="fld__control fld__control--textarea"
+          formControlName="observacion"
+          rows="3"
+          placeholder="Describe el hallazgo y el impacto…"
+        ></textarea>
+      </label>
+
+      <label class="fld">
+        <span class="fld__label">Ajustes sugeridos</span>
+        <textarea
+          class="fld__control fld__control--textarea"
+          formControlName="ajustesSugeridos"
+          rows="3"
+          placeholder="Propuesta de ajustes o medidas…"
+        ></textarea>
+      </label>
+    </section>
+
+    <section class="card">
+      <h2 class="card__title">Referencia normativa</h2>
+
+      <div class="grid grid--3">
+        <label class="fld">
+          <span class="fld__label">Fuente</span>
+          <select
+            class="fld__control"
+            [ngModel]="selectedFuente()"
+            (ngModelChange)="onFuenteChange($event)"
+            [ngModelOptions]="{ standalone: true }"
+          >
+            <option value="">— Todas —</option>
+            <option *ngFor="let f of fuentes" [value]="f">{{ f }}</option>
+          </select>
+          <small class="hint">Filtra por norma para acotar la lista.</small>
+        </label>
+
+        <label class="fld">
+          <span class="fld__label">Buscar</span>
+          <input
+            class="fld__control"
+            type="search"
+            [ngModel]="searchRef()"
+            (ngModelChange)="searchRef.set($event)"
+            [ngModelOptions]="{ standalone: true }"
+            placeholder="Ej. 10A, rampa, puerta…"
+          />
+        </label>
+
+        <label class="fld">
+          <span class="fld__label"
+            >Ref. Normativa <span class="req">*</span></span
+          >
+          <select
+            class="fld__control"
+            formControlName="refNormativa"
+            (change)="onRefChange($event)"
+            required
+          >
+            <option value="">— Seleccionar —</option>
+            <option *ngFor="let n of filteredNormativas()" [value]="n.label">
+              {{ n.label }}
+            </option>
+          </select>
+        </label>
+      </div>
+
+      <label class="fld">
+        <span class="fld__label">Ref. Fotográfica (URL)</span>
+        <input
+          class="fld__control"
+          formControlName="refFotografica"
+          placeholder="https://…"
+        />
+        <small class="hint"
+          >En una siguiente iteración podemos habilitar subida de
+          imágenes.</small
+        >
+      </label>
+    </section>
+
+    <footer class="page__footer">
+      <button type="button" class="btn btn--ghost" [disabled]="isSaving()">
+        Cancelar
+      </button>
+      <button
+        type="submit"
+        class="btn btn--primary"
+        [disabled]="isSaving() || !usuarioId || form.invalid"
+      >
+        <span class="spinner" *ngIf="isSaving()"></span>
+        Guardar
+      </button>
+    </footer>
+  </form>
+
+  <!-- Toasts fuera del form -->
+  <div
+    class="toast"
+    *ngIf="showToast() as t"
+    [class.toast--ok]="t.type === 'ok'"
+    [class.toast--error]="t.type === 'error'"
+  >
+    {{ t.message }}
+  </div>
+</div>

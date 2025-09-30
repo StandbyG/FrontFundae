@@ -6,6 +6,7 @@ import { AjusteRazonable } from '../core/models/ajuste-razonable.model';
 import { AjusteRazonableCreate } from '../core/models/ajuste-razonable-create.model';
 import { AjusteEstadoUpdate } from '../core/models/AjusteEstadoUpdate';
 import { environment } from '../../environments/environment';
+import { AjusteRazonableOngCreate } from '../core/models/ajuste-razonable-ong-create.model';
 
 @Injectable({
   providedIn: 'root'
@@ -88,4 +89,10 @@ updateAjusteEstado(id: number, datos: AjusteEstadoUpdate): Observable<AjusteRazo
   // Ahora llama al endpoint PATCH
   return this.http.patch<AjusteRazonable>(`${this.apiUrl}/${id}`, datos, { headers: this.getAuthHeaders() });
 }
+createAjusteOng(payload: AjusteRazonableOngCreate) {
+  return this.http.post<any>(this.apiUrl + '/ong', payload, {
+    headers: this.getAuthHeaders()
+  });
+}
+
 }
