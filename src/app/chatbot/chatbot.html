@@ -1,4 +1,3 @@
-
 <div class="chatbot-wrapper">
   <!-- Header -->
   <div class="chatbot-header">
@@ -10,7 +9,7 @@
         <h3 class="bot-name">RoboAmigo</h3>
         <div class="bot-status">
           <span class="status-indicator"></span>
-          <span class="status-text">En línea</span>
+          <span class="status-text">En línea · Siempre disponible</span>
         </div>
       </div>
     </div>
@@ -24,18 +23,22 @@
     <!-- Welcome Message -->
     <div class="welcome-message" *ngIf="messages.length === 0">
       <div class="welcome-icon">
-        <i class="bi bi-chat-heart"></i>
+        <i class="bi bi-chat-heart-fill"></i>
       </div>
       <h4>¡Hola! Soy RoboAmigo</h4>
-      <p>Estoy aquí para ayudarte con información sobre ajustes razonables y accesibilidad.</p>
+      <p>Estoy aquí para ayudarte con información sobre ajustes razonables y accesibilidad laboral.</p>
       <div class="quick-actions">
         <button class="quick-btn" (click)="sendQuickMessage('¿Qué son los ajustes razonables?')">
-          <i class="bi bi-question-circle"></i>
+          <i class="bi bi-question-circle-fill"></i>
           <span>¿Qué son los ajustes razonables?</span>
         </button>
         <button class="quick-btn" (click)="sendQuickMessage('¿Cómo solicito un ajuste?')">
-          <i class="bi bi-file-text"></i>
+          <i class="bi bi-file-text-fill"></i>
           <span>¿Cómo solicito un ajuste?</span>
+        </button>
+        <button class="quick-btn" (click)="sendQuickMessage('Tipos de ajustes disponibles')">
+          <i class="bi bi-grid-3x3-gap-fill"></i>
+          <span>Tipos de ajustes disponibles</span>
         </button>
         <button class="quick-btn" (click)="sendQuickMessage('Necesito ayuda')">
           <i class="bi bi-life-preserver"></i>
@@ -86,7 +89,12 @@
   <!-- Input Area -->
   <div class="chatbot-input">
     <div class="input-wrapper">
-      <button class="btn-attachment" type="button" aria-label="Adjuntar archivo">
+      <button 
+        class="btn-attachment" 
+        type="button" 
+        aria-label="Adjuntar archivo"
+        title="Adjuntar archivo"
+      >
         <i class="bi bi-paperclip"></i>
       </button>
       <input
@@ -104,12 +112,16 @@
         (click)="sendMessage()"
         [disabled]="!userMessage.trim() || isTyping"
         aria-label="Enviar mensaje"
+        title="Enviar mensaje"
       >
         <i class="bi bi-send-fill"></i>
       </button>
     </div>
     <div class="input-footer">
-      <span class="footer-text">Presiona Enter para enviar</span>
+      <span class="footer-text">
+        <i class="bi bi-shield-check"></i>
+        Conversación segura y confidencial
+      </span>
     </div>
   </div>
 </div>

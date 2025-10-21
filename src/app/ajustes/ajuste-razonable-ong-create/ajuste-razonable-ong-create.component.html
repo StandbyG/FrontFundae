@@ -1,228 +1,459 @@
-<div class="page">
-  <form [formGroup]="form" (ngSubmit)="submit()">
-    <header class="page__header">
-      <div class="page__title">
-        <h1>Ajuste razonable (ONG)</h1>
-        <p>
-          Registra recomendaciones dirigidas a empleadores con referencia
-          normativa estandarizada.
-        </p>
-      </div>
-      <div class="page__actions">
-        <button type="button" class="btn btn--ghost" [disabled]="isSaving()">
-          Cancelar
-        </button>
-        <button
-          type="submit"
-          class="btn btn--primary"
-          [disabled]="isSaving() || !usuarioId || form.invalid"
-        >
-          <span class="spinner" *ngIf="isSaving()"></span>
-          Guardar
-        </button>
-      </div>
-    </header>
-
-    <section class="card">
-      <h2 class="card__title">Destinatario</h2>
-      <div class="grid grid--2">
-        <div>
-          <label class="fld">
-            <span class="fld__label"
-              >Usuario empleador <span class="req">*</span></span
-            >
-            <app-user-select
-              [(value)]="usuarioId"
-              (userChange)="onUser($event)"
-            >
-            </app-user-select>
-          </label>
-          <small class="hint" *ngIf="!usuarioId"
-            >Selecciona el empleador al que va dirigido el ajuste.</small
-          >
+<div class="page-wrapper">
+  <div class="page-container">
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      
+      <!-- HEADER -->
+      <header class="page-header">
+        <div class="header-left">
+          <a [routerLink]="['/dashboard']" class="btn-back">
+            <i class="bi bi-arrow-left"></i>
+          </a>
+          <div class="header-content">
+            <h1 class="page-title">
+              <i class="bi bi-building"></i>
+              Ajuste Razonable para Empleador
+            </h1>
+            <p class="page-subtitle">
+              Registra recomendaciones con referencia normativa estandarizada
+            </p>
+          </div>
         </div>
-      </div>
-    </section>
+        <div class="header-actions">
+          <button 
+            type="button" 
+            class="btn btn-secondary" 
+            [disabled]="isSaving()"
+            [routerLink]="['/dashboard']">
+            <i class="bi bi-x-circle"></i>
+            <span>Cancelar</span>
+          </button>
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="isSaving() || !usuarioId || form.invalid">
+            <span *ngIf="!isSaving()">
+              <i class="bi bi-check-circle"></i>
+              <span>Guardar Ajuste</span>
+            </span>
+            <span *ngIf="isSaving()" class="loading-content">
+              <span class="spinner"></span>
+              <span>Guardando...</span>
+            </span>
+          </button>
+        </div>
+      </header>
 
-    <section class="card">
-      <h2 class="card__title">Detalle del ajuste</h2>
-      <div class="grid grid--2-1">
-        <label class="fld">
-          <span class="fld__label">Espacio</span>
-          <input
-            class="fld__control"
-            formControlName="espacio"
-            placeholder="Ej. Circulación, Acceso, Sanitarios…"
-          />
-        </label>
-
-        <div class="pills">
-          <div class="pills__group">
-            <div class="pills__label">Dificultad</div>
-            <div class="pills__set" role="group" aria-label="Dificultad">
-              <button
-                type="button"
-                class="pill"
-                [class.is-active]="form.value.dificultad === 'BAJA'"
-                (click)="setDificultad('BAJA')"
-              >
-                Baja
-              </button>
-              <button
-                type="button"
-                class="pill"
-                [class.is-active]="form.value.dificultad === 'MEDIA'"
-                (click)="setDificultad('MEDIA')"
-              >
-                Media
-              </button>
-              <button
-                type="button"
-                class="pill"
-                [class.is-active]="form.value.dificultad === 'ALTA'"
-                (click)="setDificultad('ALTA')"
-              >
-                Alta
-              </button>
-            </div>
+      <!-- PROGRESS BAR -->
+      <div class="progress-indicator">
+        <div class="progress-step" [class.completed]="usuarioId">
+          <div class="step-circle">
+            <i class="bi" [ngClass]="usuarioId ? 'bi-check-lg' : 'bi-1-circle'"></i>
           </div>
-          <div class="pills__group">
-            <div class="pills__label">Urgencia</div>
-            <div class="pills__set" role="group" aria-label="Urgencia">
-              <button
-                type="button"
-                class="pill"
-                [class.is-active]="form.value.urgencia === 'BAJA'"
-                (click)="setUrgencia('BAJA')"
-              >
-                Baja
-              </button>
-              <button
-                type="button"
-                class="pill"
-                [class.is-active]="form.value.urgencia === 'MEDIA'"
-                (click)="setUrgencia('MEDIA')"
-              >
-                Media
-              </button>
-              <button
-                type="button"
-                class="pill"
-                [class.is-active]="form.value.urgencia === 'ALTA'"
-                (click)="setUrgencia('ALTA')"
-              >
-                Alta
-              </button>
-            </div>
+          <span class="step-label">Destinatario</span>
+        </div>
+        <div class="progress-line" [class.completed]="usuarioId"></div>
+        <div class="progress-step" [class.completed]="form.get('observacion')?.valid">
+          <div class="step-circle">
+            <i class="bi" [ngClass]="form.get('observacion')?.valid ? 'bi-check-lg' : 'bi-2-circle'"></i>
           </div>
+          <span class="step-label">Detalle</span>
+        </div>
+        <div class="progress-line" [class.completed]="form.get('observacion')?.valid"></div>
+        <div class="progress-step" [class.completed]="form.get('refNormativa')?.valid">
+          <div class="step-circle">
+            <i class="bi" [ngClass]="form.get('refNormativa')?.valid ? 'bi-check-lg' : 'bi-3-circle'"></i>
+          </div>
+          <span class="step-label">Normativa</span>
         </div>
       </div>
 
-      <label class="fld">
-        <span class="fld__label">Observación <span class="req">*</span></span>
-        <textarea
-          class="fld__control fld__control--textarea"
-          formControlName="observacion"
-          rows="3"
-          placeholder="Describe el hallazgo y el impacto…"
-        ></textarea>
-      </label>
+      <div class="cards-container">
+        
+        <!-- CARD 1: DESTINATARIO -->
+        <section class="card" [class.card-complete]="usuarioId">
+          <div class="card-header">
+            <div class="card-header-left">
+              <div class="card-icon">
+                <i class="bi bi-person-badge"></i>
+              </div>
+              <div>
+                <h2 class="card-title">Destinatario del Ajuste</h2>
+                <p class="card-description">Selecciona el empleador que recibirá esta recomendación</p>
+              </div>
+            </div>
+            <span class="card-badge" *ngIf="usuarioId">
+              <i class="bi bi-check-circle-fill"></i>
+              Completado
+            </span>
+          </div>
 
-      <label class="fld">
-        <span class="fld__label">Ajustes sugeridos</span>
-        <textarea
-          class="fld__control fld__control--textarea"
-          formControlName="ajustesSugeridos"
-          rows="3"
-          placeholder="Propuesta de ajustes o medidas…"
-        ></textarea>
-      </label>
-    </section>
+          <div class="card-body">
+            <div class="form-row">
+              <div class="form-group form-group-large">
+                <label class="form-label">
+                  <i class="bi bi-building"></i>
+                  <span>Usuario Empleador <span class="required">*</span></span>
+                </label>
+                <app-user-select
+                  [(value)]="usuarioId"
+                  (userChange)="onUser($event)">
+                </app-user-select>
+                <div class="form-hint" *ngIf="!usuarioId">
+                  <i class="bi bi-info-circle"></i>
+                  <span>Selecciona la empresa u organización destinataria del ajuste</span>
+                </div>
+                <div class="form-success" *ngIf="usuarioId && selectedUser">
+                  <i class="bi bi-check-circle-fill"></i>
+                  <span>Seleccionado: <strong>{{ selectedUser.nombreEmpresa }}</strong></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
 
-    <section class="card">
-      <h2 class="card__title">Referencia normativa</h2>
+        <!-- CARD 2: DETALLE DEL AJUSTE -->
+        <section class="card" [class.card-complete]="form.get('observacion')?.valid">
+          <div class="card-header">
+            <div class="card-header-left">
+              <div class="card-icon">
+                <i class="bi bi-clipboard-check"></i>
+              </div>
+              <div>
+                <h2 class="card-title">Detalle del Ajuste</h2>
+                <p class="card-description">Describe el hallazgo y las recomendaciones específicas</p>
+              </div>
+            </div>
+            <span class="card-badge" *ngIf="form.get('observacion')?.valid">
+              <i class="bi bi-check-circle-fill"></i>
+              Completado
+            </span>
+          </div>
 
-      <div class="grid grid--3">
-        <label class="fld">
-          <span class="fld__label">Fuente</span>
-          <select
-            class="fld__control"
-            [ngModel]="selectedFuente()"
-            (ngModelChange)="onFuenteChange($event)"
-            [ngModelOptions]="{ standalone: true }"
-          >
-            <option value="">— Todas —</option>
-            <option *ngFor="let f of fuentes" [value]="f">{{ f }}</option>
-          </select>
-          <small class="hint">Filtra por norma para acotar la lista.</small>
-        </label>
+          <div class="card-body">
+            <div class="form-row form-row-2">
+              <div class="form-group">
+                <label class="form-label">
+                  <i class="bi bi-geo-alt"></i>
+                  <span>Espacio Físico</span>
+                </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="espacio"
+                  placeholder="Ej: Circulación, Acceso, Sanitarios, Área de trabajo..."
+                />
+                <div class="form-hint">
+                  <i class="bi bi-lightbulb"></i>
+                  <span>Especifica el área donde se requiere el ajuste</span>
+                </div>
+              </div>
 
-        <label class="fld">
-          <span class="fld__label">Buscar</span>
-          <input
-            class="fld__control"
-            type="search"
-            [ngModel]="searchRef()"
-            (ngModelChange)="searchRef.set($event)"
-            [ngModelOptions]="{ standalone: true }"
-            placeholder="Ej. 10A, rampa, puerta…"
-          />
-        </label>
+              <div class="form-group">
+                <label class="form-label">
+                  <i class="bi bi-calendar-event"></i>
+                  <span>Fecha de Registro</span>
+                </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [value]="today"
+                  disabled
+                />
+                <div class="form-hint">
+                  <i class="bi bi-clock"></i>
+                  <span>Se registrará automáticamente con la fecha actual</span>
+                </div>
+              </div>
+            </div>
 
-        <label class="fld">
-          <span class="fld__label"
-            >Ref. Normativa <span class="req">*</span></span
-          >
-          <select
-            class="fld__control"
-            formControlName="refNormativa"
-            (change)="onRefChange($event)"
-            required
-          >
-            <option value="">— Seleccionar —</option>
-            <option *ngFor="let n of filteredNormativas()" [value]="n.label">
-              {{ n.label }}
-            </option>
-          </select>
-        </label>
+            <!-- PRIORITY PILLS -->
+            <div class="pills-container">
+              <div class="pills-group">
+                <label class="pills-label">
+                  <i class="bi bi-speedometer2"></i>
+                  Nivel de Dificultad
+                </label>
+                <div class="pills-set">
+                  <button
+                    type="button"
+                    class="pill pill-success"
+                    [class.active]="form.value.dificultad === 'BAJA'"
+                    (click)="setDificultad('BAJA')">
+                    <i class="bi bi-arrow-down-circle"></i>
+                    <span>Baja</span>
+                  </button>
+                  <button
+                    type="button"
+                    class="pill pill-warning"
+                    [class.active]="form.value.dificultad === 'MEDIA'"
+                    (click)="setDificultad('MEDIA')">
+                    <i class="bi bi-dash-circle"></i>
+                    <span>Media</span>
+                  </button>
+                  <button
+                    type="button"
+                    class="pill pill-danger"
+                    [class.active]="form.value.dificultad === 'ALTA'"
+                    (click)="setDificultad('ALTA')">
+                    <i class="bi bi-arrow-up-circle"></i>
+                    <span>Alta</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="pills-group">
+                <label class="pills-label">
+                  <i class="bi bi-exclamation-triangle"></i>
+                  Nivel de Urgencia
+                </label>
+                <div class="pills-set">
+                  <button
+                    type="button"
+                    class="pill pill-success"
+                    [class.active]="form.value.urgencia === 'BAJA'"
+                    (click)="setUrgencia('BAJA')">
+                    <i class="bi bi-arrow-down-circle"></i>
+                    <span>Baja</span>
+                  </button>
+                  <button
+                    type="button"
+                    class="pill pill-warning"
+                    [class.active]="form.value.urgencia === 'MEDIA'"
+                    (click)="setUrgencia('MEDIA')">
+                    <i class="bi bi-dash-circle"></i>
+                    <span>Media</span>
+                  </button>
+                  <button
+                    type="button"
+                    class="pill pill-danger"
+                    [class.active]="form.value.urgencia === 'ALTA'"
+                    (click)="setUrgencia('ALTA')">
+                    <i class="bi bi-arrow-up-circle"></i>
+                    <span>Alta</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">
+                <i class="bi bi-chat-left-text"></i>
+                <span>Observación del Hallazgo <span class="required">*</span></span>
+              </label>
+              <textarea
+                class="form-control form-textarea"
+                formControlName="observacion"
+                rows="4"
+                placeholder="Describe detalladamente el hallazgo identificado, el impacto en la accesibilidad y las barreras encontradas..."
+                [class.invalid]="form.get('observacion')?.invalid && form.get('observacion')?.touched">
+              </textarea>
+              <div class="char-counter" *ngIf="form.get('observacion')?.value">
+                <i class="bi bi-chat-square-text"></i>
+                {{ form.get('observacion')?.value?.length || 0 }} caracteres
+              </div>
+              <div class="form-error" *ngIf="form.get('observacion')?.invalid && form.get('observacion')?.touched">
+                <i class="bi bi-exclamation-circle"></i>
+                Este campo es obligatorio
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">
+                <i class="bi bi-lightbulb"></i>
+                <span>Ajustes Sugeridos</span>
+              </label>
+              <textarea
+                class="form-control form-textarea"
+                formControlName="ajustesSugeridos"
+                rows="4"
+                placeholder="Propón las medidas correctivas, ajustes razonables o mejoras recomendadas para solucionar el hallazgo...">
+              </textarea>
+              <div class="form-hint">
+                <i class="bi bi-info-circle"></i>
+                <span>Incluye recomendaciones prácticas y viables</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- CARD 3: REFERENCIA NORMATIVA -->
+        <section class="card" [class.card-complete]="form.get('refNormativa')?.valid">
+          <div class="card-header">
+            <div class="card-header-left">
+              <div class="card-icon">
+                <i class="bi bi-book"></i>
+              </div>
+              <div>
+                <h2 class="card-title">Referencia Normativa</h2>
+                <p class="card-description">Vincula el ajuste con la normativa legal aplicable</p>
+              </div>
+            </div>
+            <span class="card-badge" *ngIf="form.get('refNormativa')?.valid">
+              <i class="bi bi-check-circle-fill"></i>
+              Completado
+            </span>
+          </div>
+
+          <div class="card-body">
+            <!-- FILTERS ROW -->
+            <div class="filters-bar">
+              <div class="form-group">
+                <label class="form-label">
+                  <i class="bi bi-funnel"></i>
+                  <span>Filtrar por Fuente</span>
+                </label>
+                <select
+                  class="form-control"
+                  [ngModel]="selectedFuente()"
+                  (ngModelChange)="onFuenteChange($event)"
+                  [ngModelOptions]="{ standalone: true }">
+                  <option value="">— Todas las fuentes —</option>
+                  <option *ngFor="let f of fuentes" [value]="f">{{ f }}</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">
+                  <i class="bi bi-search"></i>
+                  <span>Buscar Normativa</span>
+                </label>
+                <div class="search-input-wrapper">
+                  <i class="bi bi-search search-icon"></i>
+                  <input
+                    type="search"
+                    class="form-control search-input"
+                    [ngModel]="searchRef()"
+                    (ngModelChange)="searchRef.set($event)"
+                    [ngModelOptions]="{ standalone: true }"
+                    placeholder="Ej: 10A, rampa, puerta, acceso..."
+                  />
+                  <button 
+                    type="button" 
+                    class="clear-search" 
+                    *ngIf="searchRef()"
+                    (click)="searchRef.set('')">
+                    <i class="bi bi-x"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- RESULTS COUNTER -->
+            <div class="results-info" *ngIf="searchRef() || selectedFuente()">
+              <i class="bi bi-filter-circle"></i>
+              <span>{{ filteredNormativas().length }} normativa(s) encontrada(s)</span>
+              <button 
+                type="button" 
+                class="btn-clear-filters"
+                (click)="clearFilters()"
+                *ngIf="searchRef() || selectedFuente()">
+                <i class="bi bi-x-circle"></i>
+                Limpiar filtros
+              </button>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">
+                <i class="bi bi-file-text"></i>
+                <span>Referencia Normativa <span class="required">*</span></span>
+              </label>
+              <select
+                class="form-control form-select-large"
+                formControlName="refNormativa"
+                (change)="onRefChange($event)"
+                [class.invalid]="form.get('refNormativa')?.invalid && form.get('refNormativa')?.touched"
+                required>
+                <option value="">— Seleccionar normativa aplicable —</option>
+                <option *ngFor="let n of filteredNormativas()" [value]="n.label">
+                  {{ n.label }}
+                </option>
+              </select>
+              <div class="form-error" *ngIf="form.get('refNormativa')?.invalid && form.get('refNormativa')?.touched">
+                <i class="bi bi-exclamation-circle"></i>
+                Debes seleccionar una referencia normativa
+              </div>
+              <div class="form-success" *ngIf="form.get('refNormativa')?.valid && form.value.refNormativa">
+                <i class="bi bi-check-circle-fill"></i>
+                Normativa seleccionada: <strong>{{ form.value.refNormativa }}</strong>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">
+                <i class="bi bi-image"></i>
+                <span>Referencia Fotográfica (URL)</span>
+              </label>
+              <input
+                type="url"
+                class="form-control"
+                formControlName="refFotografica"
+                placeholder="https://ejemplo.com/imagen.jpg"
+              />
+              <div class="form-hint">
+                <i class="bi bi-info-circle"></i>
+                <span>Opcional: Agrega un enlace a una imagen de referencia</span>
+              </div>
+              <div class="image-preview" *ngIf="form.value.refFotografica && isValidUrl(form.value.refFotografica)">
+                <img [src]="form.value.refFotografica" alt="Preview" (error)="onImageError($event)">
+              </div>
+            </div>
+          </div>
+        </section>
+
       </div>
 
-      <label class="fld">
-        <span class="fld__label">Ref. Fotográfica (URL)</span>
-        <input
-          class="fld__control"
-          formControlName="refFotografica"
-          placeholder="https://…"
-        />
-        <small class="hint"
-          >En una siguiente iteración podemos habilitar subida de
-          imágenes.</small
-        >
-      </label>
-    </section>
+      <!-- FOOTER ACTIONS -->
+      <footer class="page-footer">
+        <div class="footer-info">
+          <i class="bi bi-info-circle"></i>
+          <span>Los campos marcados con <span class="required">*</span> son obligatorios</span>
+        </div>
+        <div class="footer-actions">
+          <button 
+            type="button" 
+            class="btn btn-secondary" 
+            [disabled]="isSaving()"
+            [routerLink]="['/dashboard']">
+            <i class="bi bi-x-circle"></i>
+            <span>Cancelar</span>
+          </button>
+          <button
+            type="submit"
+            class="btn btn-primary btn-large"
+            [disabled]="isSaving() || !usuarioId || form.invalid">
+            <span *ngIf="!isSaving()">
+              <i class="bi bi-check-circle"></i>
+              <span>Guardar Ajuste Razonable</span>
+            </span>
+            <span *ngIf="isSaving()" class="loading-content">
+              <span class="spinner"></span>
+              <span>Guardando...</span>
+            </span>
+          </button>
+        </div>
+      </footer>
 
-    <footer class="page__footer">
-      <button type="button" class="btn btn--ghost" [disabled]="isSaving()">
-        Cancelar
-      </button>
-      <button
-        type="submit"
-        class="btn btn--primary"
-        [disabled]="isSaving() || !usuarioId || form.invalid"
-      >
-        <span class="spinner" *ngIf="isSaving()"></span>
-        Guardar
-      </button>
-    </footer>
-  </form>
+    </form>
+  </div>
 
-  <!-- Toasts fuera del form -->
-  <div
-    class="toast"
-    *ngIf="showToast() as t"
-    [class.toast--ok]="t.type === 'ok'"
-    [class.toast--error]="t.type === 'error'"
-  >
-    {{ t.message }}
+  <!-- TOAST NOTIFICATIONS -->
+  <div class="toast-container">
+    <div
+      class="toast"
+      *ngIf="showToast() as t"
+      [class.toast-success]="t.type === 'ok'"
+      [class.toast-error]="t.type === 'error'"
+      [@slideIn]>
+      <div class="toast-icon">
+        <i class="bi" [ngClass]="t.type === 'ok' ? 'bi-check-circle-fill' : 'bi-exclamation-triangle-fill'"></i>
+      </div>
+      <div class="toast-content">
+        <div class="toast-title">{{ t.type === 'ok' ? '¡Éxito!' : 'Error' }}</div>
+        <div class="toast-message">{{ t.message }}</div>
+      </div>
+      <button class="toast-close" (click)="showToast.set(null)">
+        <i class="bi bi-x"></i>
+      </button>
+    </div>
   </div>
 </div>

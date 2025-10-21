@@ -3,7 +3,10 @@
   <div class="historial-header">
     <div class="header-title">
       <h3>Historial de Conversaciones</h3>
-      <span class="total-count">{{ logs.length }} conversaciones</span>
+      <span class="total-count">
+        <i class="bi bi-chat-text"></i>
+        {{ logs.length }} conversaciones
+      </span>
     </div>
     
     <!-- Search Bar -->
@@ -15,21 +18,27 @@
         [(ngModel)]="filtroPregunta"
         (input)="aplicarFiltros()"
         placeholder="Buscar en conversaciones..."
+        aria-label="Buscar conversaciones"
       />
       <button 
         *ngIf="filtroPregunta" 
         class="clear-search"
         (click)="filtroPregunta = ''; aplicarFiltros()"
+        aria-label="Limpiar búsqueda"
       >
-        <i class="bi bi-x"></i>
+        <i class="bi bi-x-circle-fill"></i>
       </button>
     </div>
   </div>
 
   <!-- Loading State -->
   <div *ngIf="isLoading" class="loading-state">
-    <div class="spinner-border text-primary" role="status"></div>
-    <p>Cargando historial...</p>
+    <div class="spinner-wrapper">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+    </div>
+    <p class="loading-text">Cargando historial...</p>
   </div>
 
   <!-- Empty State -->
@@ -39,16 +48,18 @@
     </div>
     <h4>Sin conversaciones</h4>
     <p>Aún no hay conversaciones registradas con el chatbot.</p>
+    <small class="empty-hint">Inicia una conversación para ver tu historial aquí</small>
   </div>
 
   <!-- No Results -->
   <div *ngIf="!isLoading && logs.length > 0 && filteredLogs.length === 0" class="empty-state">
-    <div class="empty-icon">
+    <div class="empty-icon search-icon">
       <i class="bi bi-search"></i>
     </div>
     <h4>Sin resultados</h4>
-    <p>No se encontraron conversaciones que coincidan con "{{ filtroPregunta }}"</p>
+    <p>No se encontraron conversaciones que coincidan con <strong>"{{ filtroPregunta }}"</strong></p>
     <button class="btn-clear-filter" (click)="filtroPregunta = ''; aplicarFiltros()">
+      <i class="bi bi-arrow-clockwise"></i>
       Limpiar búsqueda
     </button>
   </div>
@@ -63,10 +74,13 @@
       <!-- User Info (Admin only) -->
       <div *ngIf="isAdmin" class="log-user-info">
         <div class="user-badge">
-          <i class="bi bi-person-circle"></i>
+          <i class="bi bi-building"></i>
           <span>{{ log.usuario.nombreEmpresa }}</span>
         </div>
-        <span class="log-date">{{ log.fecha | date:'dd/MM/yyyy HH:mm' }}</span>
+        <span class="log-date">
+          <i class="bi bi-calendar-event"></i>
+          {{ log.fecha | date:'dd/MM/yyyy HH:mm' }}
+        </span>
       </div>
 
       <!-- Conversation -->
@@ -78,7 +92,10 @@
               <i class="bi bi-person-fill"></i>
             </div>
             <span class="message-label">Pregunta</span>
-            <span *ngIf="!isAdmin" class="message-time">{{ log.fecha | date:'dd/MM/yyyy HH:mm' }}</span>
+            <span *ngIf="!isAdmin" class="message-time">
+              <i class="bi bi-clock"></i>
+              {{ log.fecha | date:'dd/MM/yyyy HH:mm' }}
+            </span>
           </div>
           <div class="message-content">
             <p>{{ log.pregunta }}</p>
@@ -103,9 +120,11 @@
       <div class="log-actions">
         <button class="action-btn" title="Copiar conversación" (click)="copyConversation(log)">
           <i class="bi bi-clipboard"></i>
+          <span class="action-label">Copiar</span>
         </button>
         <button class="action-btn" title="Compartir" (click)="shareConversation(log)">
           <i class="bi bi-share"></i>
+          <span class="action-label">Compartir</span>
         </button>
       </div>
     </div>
@@ -117,14 +136,15 @@
       class="page-btn"
       [disabled]="currentPage === 1"
       (click)="cambiarPagina(-1)"
+      aria-label="Página anterior"
     >
       <i class="bi bi-chevron-left"></i>
-      Anterior
+      <span class="btn-text">Anterior</span>
     </button>
     
     <div class="page-info">
       <span class="page-current">{{ currentPage }}</span>
-      <span class="page-separator">de</span>
+      <span class="page-separator">/</span>
       <span class="page-total">{{ totalPages() }}</span>
     </div>
     
@@ -132,8 +152,9 @@
       class="page-btn"
       [disabled]="currentPage === totalPages()"
       (click)="cambiarPagina(1)"
+      aria-label="Página siguiente"
     >
-      Siguiente
+      <span class="btn-text">Siguiente</span>
       <i class="bi bi-chevron-right"></i>
     </button>
   </div>

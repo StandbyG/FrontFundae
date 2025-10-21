@@ -1,129 +1,230 @@
-<div class="form-container">
-  <div class="form-card">
+<div class="page-wrapper">
+  <div class="form-container">
+    <div class="form-card">
 
-    <div class="card-header">
-      <a [routerLink]="['/dashboard']" class="btn-back">
-        <i class="fa fa-arrow-left"></i>
-      </a>
-      <div>
-        <h2 class="card-title">Crear Nuevos Ajustes Razonables</h2>
-        <p class="card-subtitle">Elige un método: regístralos manualmente o sube un archivo Excel.</p>
+      <div class="card-header">
+        <a [routerLink]="['/dashboard']" class="btn-back">
+          <i class="fa fa-arrow-left"></i>
+        </a>
+        <div class="header-content">
+          <h2 class="card-title">Crear Ajustes Razonables</h2>
+          <p class="card-subtitle">Gestiona los ajustes necesarios para mejorar la accesibilidad y comodidad</p>
+        </div>
       </div>
-    </div>
 
-    <div class="card-body">
-      <ul class="nav nav-tabs nav-fill mb-4">
-        <li class="nav-item">
-          <a class="nav-link" [class.active]="activeTab === 'manual'" (click)="activeTab = 'manual'">
-            <i class="fa fa-edit me-2"></i>Registro Manual
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" [class.active]="activeTab === 'excel'" (click)="activeTab = 'excel'">
-            <i class="fa fa-file-excel me-2"></i>Carga Masiva por Excel
-          </a>
-        </li>
-      </ul>
+      <div class="card-body">
+        <ul class="nav nav-tabs mb-4">
+          <li class="nav-item">
+            <a class="nav-link" [class.active]="activeTab === 'manual'" (click)="activeTab = 'manual'">
+              <i class="fa fa-edit"></i>
+              <span>Registro Manual</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" [class.active]="activeTab === 'excel'" (click)="activeTab = 'excel'">
+              <i class="fa fa-file-excel"></i>
+              <span>Carga Masiva</span>
+            </a>
+          </li>
+        </ul>
 
-      <div class="tab-content">
+        <div class="tab-content">
 
-        <div *ngIf="activeTab === 'manual'">
-          <form [formGroup]="ajusteForm" (ngSubmit)="onSubmit()">
-            
-            <div formArrayName="ajustes">
-              <div *ngFor="let ajusteControl of ajustesFormArray.controls; let i = index" [formGroupName]="i" class="ajuste-item">
-                
-                <div class="ajuste-item-header">
-                  <h5>Ajuste #{{ i + 1 }}</h5>
-                  <button type="button" class="btn btn-sm btn-outline-danger" (click)="removeAjuste(i)" *ngIf="ajustesFormArray.controls.length > 1">
-                    <i class="fa fa-trash"></i> Eliminar
-                  </button>
-                </div>
-                
-                <div class="form-group">
-                  <label>Tipo de Ajuste</label>
-                  <input type="text" class="form-control" formControlName="tipoAjuste" placeholder="Ej: Silla ergonómica...">
-                </div>
-                
-                <div class="form-group">
-                  <label>Descripción</label>
-                  <textarea class="form-control" rows="3" formControlName="descripcion" placeholder="Describe la necesidad..."></textarea>
-                </div>
-                
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label>Fecha de Recomendación</label>
-                      <input type="date" class="form-control" formControlName="fechaRecomendacion">
+          <!-- TAB MANUAL -->
+          <div *ngIf="activeTab === 'manual'" class="fade-in">
+            <form [formGroup]="ajusteForm" (ngSubmit)="onSubmit()">
+              
+              <div formArrayName="ajustes">
+                <div *ngFor="let ajusteControl of ajustesFormArray.controls; let i = index" 
+                     [formGroupName]="i" 
+                     class="ajuste-item">
+                  
+                  <div class="ajuste-item-header">
+                    <div class="header-left">
+                      <span class="badge-number">{{ i + 1 }}</span>
+                      <h5>Ajuste Razonable</h5>
+                    </div>
+                    <button type="button" 
+                            class="btn-delete" 
+                            (click)="removeAjuste(i)" 
+                            *ngIf="ajustesFormArray.controls.length > 1"
+                            title="Eliminar ajuste">
+                      <i class="fa fa-trash"></i>
+                    </button>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label>
+                      <i class="fa fa-tag"></i>
+                      Tipo de Ajuste
+                    </label>
+                    <input type="text" 
+                           class="form-control" 
+                           formControlName="tipoAjuste" 
+                           placeholder="Ej: Silla ergonómica, Monitor elevado...">
+                  </div>
+                  
+                  <div class="form-group">
+                    <label>
+                      <i class="fa fa-align-left"></i>
+                      Descripción
+                    </label>
+                    <textarea class="form-control" 
+                              rows="3" 
+                              formControlName="descripcion" 
+                              placeholder="Describe detalladamente la necesidad del ajuste..."></textarea>
+                  </div>
+                  
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>
+                          <i class="fa fa-calendar"></i>
+                          Fecha de Recomendación
+                        </label>
+                        <input type="date" class="form-control" formControlName="fechaRecomendacion">
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>
+                          <i class="fa fa-calendar-check"></i>
+                          Fecha de Implementación
+                          <span class="optional-label">(Opcional)</span>
+                        </label>
+                        <input type="date" class="form-control" formControlName="fechaImplementacion">
+                      </div>
                     </div>
                   </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label>Fecha de Implementación (Opcional)</label>
-                      <input type="date" class="form-control" formControlName="fechaImplementacion">
-                    </div>
-                  </div>
-                </div>
 
+                </div>
               </div>
-            </div>
 
-            <div class="form-actions">
-              <button type="button" class="btn btn-secondary" (click)="addAjuste()">
-                <i class="fa fa-plus me-2"></i> Añadir Otro Ajuste
+              <div class="form-actions">
+                <button type="button" class="btn btn-add" (click)="addAjuste()">
+                  <i class="fa fa-plus"></i>
+                  <span>Añadir Otro Ajuste</span>
+                </button>
+              </div>
+
+              <div class="card-footer">
+                <button type="submit" class="btn btn-primary" [disabled]="ajusteForm.invalid">
+                  <i class="fa fa-save"></i>
+                  <span>Guardar {{ ajustesFormArray.controls.length }} Ajuste(s)</span>
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- TAB EXCEL -->
+          <div *ngIf="activeTab === 'excel'" class="fade-in">
+            
+            <div class="excel-info-box">
+              <div class="info-header">
+                <i class="fa fa-info-circle"></i>
+                <h4>Instrucciones para la carga masiva</h4>
+              </div>
+              <ul class="info-list">
+                <li><strong>Columnas requeridas:</strong> "Tipo de Ajuste" y "Descripcion"</li>
+                <li><strong>Fechas automáticas:</strong> Se asignará la fecha actual a ambos campos</li>
+                <li><strong>Estado:</strong> Todos los ajustes se crearán con estado "Pendiente"</li>
+                <li><strong>Formato:</strong> Solo archivos Excel (.xlsx, .xls)</li>
+              </ul>
+              <button type="button" class="btn btn-download" (click)="downloadTemplate()">
+                <i class="fa fa-download"></i>
+                <span>Descargar Plantilla Excel</span>
               </button>
             </div>
 
-            <div class="card-footer">
-              <button type="submit" class="btn btn-primary w-100" [disabled]="ajusteForm.invalid">
-                <i class="fa fa-save me-2"></i> Guardar Ajustes Manuales
+            <div class="upload-box" [class.has-file]="fileName">
+              <div class="upload-icon-wrapper">
+                <i class="fa fa-cloud-upload upload-icon"></i>
+              </div>
+              <p class="upload-title">Arrastra tu archivo aquí</p>
+              <p class="upload-subtitle">o</p>
+              <label for="file-upload" class="btn btn-select-file">
+                <i class="fa fa-folder-open"></i>
+                Seleccionar Archivo
+              </label>
+              <input id="file-upload" type="file" (change)="onFileChange($event)" accept=".xlsx, .xls">
+            </div>
+
+            <div *ngIf="fileName" class="file-selected-box">
+              <i class="fa fa-file-excel file-icon"></i>
+              <div class="file-info">
+                <span class="file-label">Archivo seleccionado:</span>
+                <strong class="file-name">{{ fileName }}</strong>
+              </div>
+              <span class="file-badge" *ngIf="parsedData.length > 0">{{ parsedData.length }} registros</span>
+            </div>
+
+            <!-- Errores de validación -->
+            <div *ngIf="validationErrors.length > 0" class="alert-box alert-error">
+              <div class="alert-header">
+                <i class="fa fa-exclamation-triangle"></i>
+                <h5>Errores de Validación</h5>
+              </div>
+              <ul class="error-list">
+                <li *ngFor="let error of validationErrors">{{ error }}</li>
+              </ul>
+              <p class="alert-footer">
+                Por favor, corrige estos errores y vuelve a cargar el archivo.
+              </p>
+            </div>
+
+            <!-- Preview de datos válidos -->
+            <div *ngIf="parsedData.length > 0 && validationErrors.length === 0" class="preview-section">
+              <div class="preview-header">
+                <h4>
+                  <i class="fa fa-eye"></i>
+                  Vista Previa de Datos
+                </h4>
+                <span class="preview-badge">{{ parsedData.length }} registros válidos</span>
+              </div>
+              
+              <div class="table-container">
+                <table class="preview-table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Tipo de Ajuste</th>
+                      <th>Descripción</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of parsedData | slice:0:5; let idx = index">
+                      <td class="cell-number">{{ idx + 1 }}</td>
+                      <td class="cell-type">{{ item['Tipo de Ajuste'] }}</td>
+                      <td class="cell-desc">{{ item['Descripcion'] }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              
+              <p *ngIf="parsedData.length > 5" class="more-records">
+                <i class="fa fa-ellipsis-h"></i>
+                y {{ parsedData.length - 5 }} registro(s) más
+              </p>
+            </div>
+
+            <div class="card-footer" *ngIf="parsedData.length > 0 && validationErrors.length === 0">
+              <button type="button" 
+                      class="btn btn-success" 
+                      (click)="onSubmit()" 
+                      [disabled]="isUploading">
+                <span *ngIf="!isUploading">
+                  <i class="fa fa-upload"></i>
+                  Cargar y Guardar {{ parsedData.length }} Ajuste(s)
+                </span>
+                <span *ngIf="isUploading" class="loading-state">
+                  <span class="spinner"></span>
+                  Cargando...
+                </span>
               </button>
             </div>
-          </form>
+          </div>
+
         </div>
-
-        <div *ngIf="activeTab === 'excel'">
-          
-          <div class="upload-box">
-            <i class="fa fa-file-excel upload-icon"></i>
-            <p class="upload-title">Arrastra y suelta tu archivo aquí o</p>
-            <label for="file-upload" class="btn btn-primary">Seleccionar Archivo</label>
-            <input id="file-upload" type="file" (change)="onFileChange($event)" accept=".xlsx, .xls">
-            <p *ngIf="fileName" class="file-name mt-3">Archivo seleccionado: <strong>{{ fileName }}</strong></p>
-          </div>
-
-          <div *ngIf="parsedData.length > 0" class="mt-4">
-            <h4 class="preview-title">Datos a Cargar ({{ parsedData.length }} registros)</h4>
-            <div class="table-responsive preview-table">
-              <table class="table table-sm table-striped">
-                <thead>
-                  <tr>
-                    <th>Tipo de Ajuste</th>
-                    <th>Descripción</th>
-                    <th>Fecha Recomendación</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let item of parsedData | slice:0:5"> <td>{{ item['Tipo de Ajuste'] }}</td>
-                    <td>{{ item['Descripcion'] }}</td>
-                    <td>{{ item['Fecha Recomendacion'] | date:'dd/MM/yyyy' }}</td>
-                  </tr>
-                </tbody>
-              </table>
-              <p *ngIf="parsedData.length > 5" class="text-center text-muted">...y {{ parsedData.length - 5 }} más.</p>
-            </div>
-          </div>
-
-          <div class="card-footer mt-4">
-            <button type="button" class="btn btn-success w-100" (click)="onSubmit()" [disabled]="parsedData.length === 0 || isUploading">
-              <span *ngIf="!isUploading">
-                <i class="fa fa-upload me-2"></i> Cargar y Guardar {{ parsedData.length }} Ajustes
-              </span>
-              <span *ngIf="isUploading" class="spinner-border spinner-border-sm" role="status"></span>
-            </button>
-          </div>
-        </div>
-
       </div>
     </div>
   </div>

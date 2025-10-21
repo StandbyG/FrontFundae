@@ -1,115 +1,244 @@
-<header class="page-header">
-  <button class="link-back" type="button" (click)="goBack()">
-    <span class="icon" aria-hidden="true">←</span> Volver al dashboard
-  </button>
-  <h1 class="page-title">Crear retroalimentación</h1>
-  <p class="page-subtitle">Comparte una evaluación clara y útil sobre el ajuste seleccionado.</p>
-</header>
+<div class="feedback-page">
+  <!-- Header -->
+  <header class="page-header">
+    <button
+      class="link-back"
+      type="button"
+      (click)="goBack()"
+      aria-label="Volver al dashboard"
+    >
+      <span class="icon" aria-hidden="true">←</span>
+      <span>Volver al dashboard</span>
+    </button>
 
-<section class="container">
-  <!-- Alerts accesibles -->
-  <div *ngIf="errorMessage" class="alert alert-error" role="alert" aria-live="assertive">
-    {{ errorMessage }}
-  </div>
-  <div *ngIf="successMessage" class="alert alert-success" role="status" aria-live="polite">
-    {{ successMessage }}
-  </div>
+    <h1 class="page-title">Crear Retroalimentación</h1>
+    <p class="page-subtitle">
+      Comparte una evaluación clara y constructiva sobre el ajuste razonable
+      seleccionado. Tu retroalimentación ayuda a mejorar continuamente nuestros
+      procesos y servicios.
+    </p>
+  </header>
 
-  <form (ngSubmit)="onSubmit()" #feedbackForm="ngForm" class="card">
-    <div class="card-body">
-      <div class="form-grid">
-        <!-- Ajuste -->
-        <div class="form-group">
-          <label for="ajusteId">Seleccionar Ajuste</label>
-          <select
-            id="ajusteId"
-            [(ngModel)]="ajusteId"
-            name="ajusteId"
-            required
-            [disabled]="loadingAjustes"
-            aria-describedby="ajusteHelp"
-          >
-            <option value="" disabled selected>— Elige un ajuste —</option>
-            <option *ngFor="let ajuste of ajustesRazonables" [value]="ajuste.idAjuste">
-              {{ ajuste.tipoAjuste }}
-            </option>
-          </select>
-          <small id="ajusteHelp" class="help">Necesario para asociar la retroalimentación.</small>
-          <div class="field-error" *ngIf="feedbackForm.submitted && !ajusteId">Debes seleccionar un ajuste.</div>
-        </div>
+  <!-- Main -->
+  <main class="container">
+    <!-- Live alert region for screen readers -->
+    <div
+      #alertRegion
+      tabindex="-1"
+      class="sr-only"
+      aria-live="assertive"
+      aria-atomic="true"
+      role="status"
+    >
+      {{ errorMessage || successMessage }}
+    </div>
 
-        <!-- Calificación con estrellas -->
-        <div class="form-group">
-          <label>Calificación</label>
-          <div
-            class="stars"
-            role="radiogroup"
-            aria-label="Calificación de 1 a 5"
-          >
-            <button
-              *ngFor="let s of stars"
-              type="button"
-              class="star"
-              [class.active]="calificacion >= s"
-              (click)="setRating(s)"
-              (keydown.enter)="setRating(s)"
-              role="radio"
-              [attr.aria-checked]="calificacion === s"
-              [attr.aria-label]="s + ' estrellas'"
+    <!-- Visual alerts -->
+    <div *ngIf="errorMessage" class="alert alert-error" role="alert">
+      {{ errorMessage }}
+    </div>
+    <div *ngIf="successMessage" class="alert alert-success" role="status">
+      {{ successMessage }}
+    </div>
+
+    <!-- Card / Form -->
+    <form
+      [formGroup]="form"
+      (ngSubmit)="submit()"
+      class="card"
+      novalidate
+      aria-label="Formulario de retroalimentación"
+    >
+      <div class="card-body">
+        <div class="form-grid">
+          <!-- Ajuste Razonable -->
+          <div class="form-group">
+            <label for="ajusteId">
+              Seleccionar Ajuste
+              <span class="req" aria-label="requerido">*</span>
+            </label>
+            <select
+              id="ajusteId"
+              formControlName="ajusteId"
+              [disabled]="loadingAjustes"
+              [attr.aria-invalid]="isFieldInvalid('ajusteId')"
+              [attr.aria-describedby]="
+                'ajusteHelp' + (isFieldInvalid('ajusteId') ? ' ajusteError' : '')
+              "
             >
-              ★
-            </button>
-          </div>
-          <small class="help">Tu calificación actual: {{ calificacion }}/5</small>
-        </div>
+              <option value="" disabled>
+                {{ loadingAjustes ? 'Cargando ajustes…' : '— Selecciona un
+                ajuste —' }}
+              </option>
+              <option
+                *ngFor="let ajuste of ajustesRazonables"
+                [value]="ajuste.idAjuste"
+              >
+                {{ ajuste.tipoAjuste }}<span *ngIf="ajuste.espacio">
+                  – {{ ajuste.espacio }}</span
+                >
+              </option>
+            </select>
 
-        <!-- Comentario -->
-        <div class="form-group form-group--full">
-          <label for="comentario">Comentario</label>
-          <textarea
-            id="comentario"
-            [(ngModel)]="comentario"
-            name="comentario"
-            required
-            minlength="10"
-            maxlength="500"
-            rows="6"
-            aria-describedby="comentarioHelp contadorComentario"
-          ></textarea>
-          <small id="comentarioHelp" class="help">Sé específico: qué funcionó y qué mejorar.</small>
-          <div id="contadorComentario" class="counter">
-            {{ (comentario.length || 0) }} / 500
-          </div>
-          <div class="field-error" *ngIf="feedbackForm.submitted && (!comentario || comentario.length < 10)">
-            El comentario debe tener al menos 10 caracteres.
-          </div>
-        </div>
+            <small id="ajusteHelp" class="help">
+              Selecciona el ajuste razonable sobre el que deseas dar
+              retroalimentación.
+            </small>
 
-        <!-- Toggle visible empleador -->
-        <div class="form-group">
-          <label for="visibleEmpleador">Visible para el empleador</label>
-          <label class="switch">
-            <input
-              type="checkbox"
-              id="visibleEmpleador"
-              [(ngModel)]="visibleEmpleador"
-              name="visibleEmpleador"
-            />
-            <span class="slider"></span>
-          </label>
-          <small class="help">
-            Si está activado, el empleador podrá ver esta retroalimentación.
-          </small>
+            <div
+              id="ajusteError"
+              class="field-error"
+              *ngIf="isFieldInvalid('ajusteId')"
+              role="alert"
+            >
+              {{ getFieldError('ajusteId') }}
+            </div>
+          </div>
+
+          <!-- Calificación con Estrellas -->
+          <div class="form-group">
+            <label id="ratingLabel">
+              Calificación <span class="req" aria-label="requerido">*</span>
+            </label>
+
+            <div
+              class="stars"
+              role="radiogroup"
+              aria-labelledby="ratingLabel"
+              aria-describedby="ratingHelp"
+              [attr.aria-required]="true"
+            >
+              <ng-container *ngFor="let starValue of stars">
+                <input
+                  class="sr-only"
+                  type="radio"
+                  [id]="'star-' + starValue"
+                  [value]="starValue"
+                  name="calificacion"
+                  [checked]="form.get('calificacion')?.value === starValue"
+                  (change)="setRating(starValue)"
+                />
+                <label
+                  class="star"
+                  [class.active]="(form.get('calificacion')?.value ?? 0) >= starValue"
+                  tabindex="0"
+                  [attr.for]="'star-' + starValue"
+                  (keydown.enter)="setRating(starValue); $event.preventDefault()"
+                  (keydown.space)="setRating(starValue); $event.preventDefault()"
+                  [attr.aria-label]="starValue + (starValue === 1 ? ' estrella' : ' estrellas')"
+                  role="radio"
+                  [attr.aria-checked]="form.get('calificacion')?.value === starValue"
+                >
+                  ★
+                </label>
+              </ng-container>
+            </div>
+
+            <small id="ratingHelp" class="help">
+              {{ form.get('calificacion')?.value }}/5 – {{ ratingLabel }}
+            </small>
+          </div>
+
+          <!-- Comentario -->
+          <div class="form-group form-group--full">
+            <label for="comentario">
+              Comentario <span class="req" aria-label="requerido">*</span>
+            </label>
+            <textarea
+              id="comentario"
+              formControlName="comentario"
+              rows="6"
+              placeholder="Describe tu experiencia con este ajuste razonable. Sé específico sobre qué funcionó bien, qué podría mejorar, y cualquier sugerencia que tengas para optimizar el proceso..."
+              [attr.aria-invalid]="isFieldInvalid('comentario')"
+              [attr.aria-describedby]="
+                'comentarioHelp contadorComentario' + 
+                (isFieldInvalid('comentario') ? ' comentarioError' : '')
+              "
+              maxlength="500"
+            ></textarea>
+
+            <small id="comentarioHelp" class="help">
+              Sé específico y constructivo: menciona qué funcionó bien y qué se
+              podría mejorar.
+            </small>
+
+            <div
+              id="contadorComentario"
+              class="counter"
+              [attr.aria-live]="comentarioLength > 450 ? 'polite' : 'off'"
+            >
+              {{ comentarioLength }} / 500 caracteres
+              <span *ngIf="comentarioLength > 450" class="sr-only">
+                , te quedan {{ 500 - comentarioLength }} caracteres
+              </span>
+            </div>
+
+            <div
+              id="comentarioError"
+              class="field-error"
+              *ngIf="isFieldInvalid('comentario')"
+              role="alert"
+            >
+              {{ getFieldError('comentario') }}
+            </div>
+          </div>
+
+          <!-- Visibilidad para el Empleador -->
+          <div class="form-group">
+            <label for="visibleEmpleador"> Visible para el empleador </label>
+
+            <label
+              class="switch"
+              aria-label="Alternar visibilidad para el empleador"
+            >
+              <input
+                type="checkbox"
+                id="visibleEmpleador"
+                formControlName="visibleEmpleador"
+                role="switch"
+                [attr.aria-checked]="form.get('visibleEmpleador')?.value"
+                aria-describedby="visibilidadHelp"
+              />
+              <span class="slider"></span>
+            </label>
+
+            <small id="visibilidadHelp" class="help">
+              <span *ngIf="form.get('visibleEmpleador')?.value">
+                ✓ El empleador podrá ver esta retroalimentación y tus
+                comentarios.
+              </span>
+              <span *ngIf="!form.get('visibleEmpleador')?.value">
+                ✗ Esta retroalimentación será privada y solo visible para el
+                sistema.
+              </span>
+            </small>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="card-footer">
-      <button type="button" class="btn btn-secondary" (click)="goBack()">Cancelar</button>
-      <button type="submit" class="btn btn-primary" [disabled]="loading || !feedbackForm.form.valid">
-        <span class="spinner" *ngIf="loading" aria-hidden="true"></span>
-        {{ loading ? 'Enviando…' : 'Enviar retroalimentación' }}
-      </button>
-    </div>
-  </form>
-</section>
+      <!-- Footer con acciones -->
+      <div class="card-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="goBack()"
+          [disabled]="loading"
+          aria-label="Cancelar y volver al dashboard"
+        >
+          Cancelar
+        </button>
+
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="loading || form.invalid"
+          [attr.aria-busy]="loading"
+          [attr.aria-disabled]="loading || form.invalid"
+        >
+          <span class="spinner" *ngIf="loading" aria-hidden="true"></span>
+          <span>{{ loading ? 'Enviando…' : 'Enviar Retroalimentación' }}</span>
+        </button>
+      </div>
+    </form>
+  </main>
+</div>
