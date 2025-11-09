@@ -1,45 +1,77 @@
 <div class="container mt-4">
   <!-- Encabezado -->
-  <div
-    class="page-header d-flex justify-content-between align-items-center flex-wrap"
-  >
+  <div class="page-header d-flex justify-content-between align-items-center flex-wrap">
     <div>
       <h2 class="page-title">👥 Gestión de Usuarios</h2>
-      <p class="page-subtitle">
-        Administra y visualiza todos los usuarios registrados.
-      </p>
+      <p class="page-subtitle">Administra y visualiza todos los usuarios registrados.</p>
     </div>
     <a [routerLink]="['/dashboard']" class="btn btn-outline-secondary">
       <i class="fa fa-arrow-left me-2"></i> Regresar al Dashboard
     </a>
   </div>
 
-  <!-- Barra de búsqueda -->
-  <div class="search-bar my-4">
-    <i class="fa fa-search search-icon"></i>
-    <input
-      type="text"
-      class="form-control"
-      placeholder="Buscar por nombre, correo o empresa..."
-      [(ngModel)]="searchTerm"
-      (input)="filterUsers()"
-    />
+  <!-- Controles (Búsqueda + Orden) -->
+  <div class="row g-3 align-items-end my-3">
+    <div class="col-12 col-md-8">
+      <div class="search-bar">
+        <i class="fa fa-search search-icon"></i>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Buscar por nombre, correo o empresa…"
+          [(ngModel)]="searchTerm"
+          (input)="onSearchChange()"
+        />
+      </div>
+    </div>
+    <div class="col-12 col-md-4">
+      <label class="form-label mb-1">Ordenar por</label>
+      <select class="form-select" [(ngModel)]="sortMode" (change)="onSortChange()">
+        <option value="nameAsc">Nombre (A → Z)</option>
+        <option value="nameDesc">Nombre (Z → A)</option>
+        <option value="role">Rol</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Filtros activos -->
+  <div class="chips" *ngIf="searchTerm || sortMode !== 'nameAsc'">
+    <span *ngIf="searchTerm" class="chip">Búsqueda: "{{ searchTerm }}"</span>
+    <span class="chip light">Orden: {{
+      sortMode === 'nameAsc' ? 'Nombre (A → Z)' :
+      sortMode === 'nameDesc' ? 'Nombre (Z → A)' : 'Rol'
+    }}</span>
+  </div>
+
+  <!-- Loading Skeleton -->
+  <div *ngIf="isLoading" class="skeleton my-3">
+    <div class="skeleton-row"></div>
+    <div class="skeleton-row"></div>
+    <div class="skeleton-row"></div>
   </div>
 
   <!-- Lista de usuarios -->
   <div *ngIf="!isLoading && filteredUsers.length > 0" class="row g-4">
-    <div *ngFor="let user of filteredUsers" class="col-12 col-md-6 col-lg-4">
-      <div class="user-card shadow-sm">
+    <div *ngFor="let user of filteredUsers; trackBy: trackByUser" class="col-12 col-md-6 col-lg-4">
+      <div class="user-card shadow-sm"
+           [class.is-deleting]="user._deleting"
+           [class.is-deleted]="user._deleted">
         <!-- Header con avatar y nombre -->
         <div class="card-header d-flex align-items-center">
           <div class="user-avatar">
-            <span>{{ user.nombre.charAt(0).toUpperCase() }}</span>
+            <span>{{ (user.nombre || '?').charAt(0).toUpperCase() }}</span>
           </div>
           <div class="user-title ms-3">
-            <h5 class="user-name">{{ user.nombre }}</h5>
-            <p class="user-company text-muted">
-              {{ user.nombreEmpresa || 'No especificada' }}
+            <h5 class="user-name">{{ user.nombre || '—' }}</h5>
+            <p class="user-company text-muted m-0">
+              {{ user.nombreEmpresa || 'Sin empresa' }}
             </p>
+          </div>
+          <div class="ms-auto">
+            <!-- Estado "ELIMINADO" en fantasma -->
+            <span class="badge bg-secondary" *ngIf="user._deleted">
+              <i class="fa fa-trash me-1"></i> ELIMINADO
+            </span>
           </div>
         </div>
 
@@ -47,37 +79,41 @@
         <div class="card-body">
           <p class="user-detail">
             <i class="fa fa-envelope me-2"></i>
-            <span>{{ user.correo }}</span>
+            <span>{{ user.correo || '—' }}</span>
           </p>
           <p class="user-detail">
             <i class="fa fa-user-shield me-2"></i>
-            <span
-              class="badge"
-              [ngClass]="user.tipoUsuario.toLowerCase() === 'administrador' ? 'bg-primary' : 'bg-secondary'"
-            >
-              {{ user.tipoUsuario }}
+            <span class="badge"
+                  [ngClass]="(user.tipoUsuario || '').toLowerCase() === 'administrador' ? 'bg-primary' : 'bg-secondary'">
+              {{ user.tipoUsuario || '—' }}
             </span>
           </p>
+
+          <!-- Mensaje inline si hubo error puntual -->
+          <div class="text-danger small mt-1" *ngIf="user._errorMsg">
+            {{ user._errorMsg }}
+          </div>
         </div>
 
         <!-- Acciones -->
-        <div class="card-footer d-flex justify-content-end">
+        <div class="card-footer d-flex justify-content-end gap-2">
           <button
             class="btn btn-outline-danger btn-sm"
             (click)="deleteUser(user.idUsuario)"
+            [disabled]="user._deleting"
+            [attr.aria-label]="'Eliminar usuario ' + (user.nombre || '')"
+            title="Eliminar"
           >
-            <i class="fa fa-trash me-1"></i> Eliminar
+            <i class="fa" [ngClass]="user._deleting ? 'fa-spinner fa-spin' : 'fa-trash'"></i>
+            <span class="ms-1">Eliminar</span>
           </button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Mensaje si no hay usuarios -->
-  <div
-    *ngIf="!isLoading && filteredUsers.length === 0"
-    class="no-results text-center my-5"
-  >
+  <!-- Mensaje si no hay resultados -->
+  <div *ngIf="!isLoading && filteredUsers.length === 0" class="no-results text-center my-5">
     <i class="fa fa-user-slash fa-3x text-muted mb-3"></i>
     <p class="text-muted">
       No se encontraron usuarios que coincidan con la búsqueda.

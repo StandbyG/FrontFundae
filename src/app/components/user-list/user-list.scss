@@ -142,3 +142,80 @@
 .card-footer .btn:hover {
   opacity: 0.9;
 }
+
+/* Estados UI */
+.is-deleted {
+  opacity: .55;
+  filter: grayscale(.35);
+}
+
+.is-deleting {
+  opacity: .8;
+}
+
+/* Botones deshabilitados accesibles */
+a.disabled,
+[aria-disabled="true"] {
+  pointer-events: none;
+  opacity: .6;
+}
+
+/* Chips/controles */
+.chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 8px 0 4px;
+}
+.chip {
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #f2f2f2;
+  border: 1px solid #e6e6e6;
+  font-size: 12px;
+}
+.chip.light {
+  background: #fafafa;
+}
+
+/* Search bar */
+.search-bar {
+  position: relative;
+}
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9aa0a6;
+}
+.search-bar .form-control {
+  padding-left: 36px;
+}
+
+/* Skeleton simple */
+.skeleton .skeleton-row {
+  height: 16px;
+  background: linear-gradient(90deg, #eee, #f6f6f6, #eee);
+  margin: 8px 0;
+  border-radius: 6px;
+}
+
+/* Tarjetas */
+.user-card {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #eee;
+  background: #fff;
+}
+.user-avatar {
+  width: 42px; height: 42px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: #f0f3ff; color: #3b82f6; font-weight: 700;
+}
+.user-title .user-name { margin: 0; }
+.user-detail { margin: 0 0 6px; }
+
+/* Page header */
+.page-title { margin: 0; }
+.page-subtitle { margin: 0; color: #6b7280; }
