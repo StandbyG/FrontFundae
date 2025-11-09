@@ -15,182 +15,188 @@
     </div>
   </div>
 
-  <!-- Loading State -->
-  <div *ngIf="isLoading" class="loading-container">
-    <div class="spinner-border text-primary" role="status">
-      <span class="visually-hidden">Cargando...</span>
-    </div>
-    <p class="mt-3 text-muted">Cargando solicitudes...</p>
+  <!-- Loading Skeleton -->
+  <div *ngIf="isLoading" class="skeleton">
+    <div class="skeleton-row"></div>
+    <div class="skeleton-row"></div>
+    <div class="skeleton-row"></div>
   </div>
 
-  <!-- Desktop Table View -->
-  <div *ngIf="!isLoading && ajustes.length > 0" class="d-none d-lg-block">
-    <div class="card shadow-sm">
-      <div class="card-body p-0">
-        <div class="table-responsive">
-          <table class="table ajustes-table mb-0">
-            <thead>
-              <tr>
-                <th style="width: 20%">Detalle Principal</th>
-                <th style="width: 25%">Descripción</th>
-                <th style="width: 15%">Origen</th>
-                <th style="width: 12%">Fecha</th>
-                <th style="width: 10%">Estado</th>
-                <th style="width: 10%">Urgencia</th>
-                <th class="text-end" style="width: 8%">Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let ajuste of ajustes">
-                <td>
-                  <div class="primary-info">
-                    <div class="info-title">
-                      {{ ajuste.espacio || ajuste.tipoAjuste }}
-                    </div>
-                    <div class="info-subtitle" *ngIf="ajuste.espacio && ajuste.tipoAjuste">
-                      <i class="fa fa-tag me-1"></i>{{ ajuste.tipoAjuste }}
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <div class="description-cell">
-                    {{ getDescriptionText(ajuste) }}
-                  </div>
-                </td>
-                <td>
-                  <div class="origin-info">
-                    <span class="badge" [ngClass]="getOriginClass(ajuste.origen)">
-                      <i class="fa me-1" [ngClass]="ajuste.origen === 'EMPRESA' ? 'fa-building' : 'fa-hands-helping'"></i>
-                      {{ ajuste.origen }}
-                    </span>
-                    <div class="user-name mt-1" *ngIf="ajuste.usuario">
-                      {{ ajuste.usuario.nombre }}
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <div class="date-info">
-                    <div class="date-primary">
-                      {{ ajuste.fechaRecomendacion | date:'dd/MM/yyyy' }}
-                    </div>
-                    <div class="date-label">Solicitado</div>
-                  </div>
-                </td>
-                <td>
-                  <span class="badge status-badge" [ngClass]="getStatusClass(ajuste.estado)">
-                    <i class="fa me-1" [ngClass]="getStatusIcon(ajuste.estado)"></i>
-                    {{ ajuste.estado }}
-                  </span>
-                </td>
-                <td>
-                  <span class="badge urgency-badge" 
-                        [ngClass]="getUrgencyClass(ajuste.urgencia)"
-                        *ngIf="ajuste.urgencia">
-                    {{ ajuste.urgencia }}
-                  </span>
-                  <span class="text-muted small" *ngIf="!ajuste.urgencia">-</span>
-                </td>
-                <td class="text-end">
-                  <div class="action-buttons">
-                    <a
-                      [routerLink]="['/ajustes/edit', ajuste.idAjuste]"
-                      class="btn-action btn-edit"
-                      data-bs-toggle="tooltip"
-                      title="Editar"
-                    >
-                      <i class="fa fa-pencil-alt"></i>
-                    </a>
-                    <button
-                      type="button"
-                      class="btn-action btn-delete"
-                      (click)="deleteAjuste(ajuste.idAjuste)"
-                      data-bs-toggle="tooltip"
-                      title="Eliminar"
-                    >
-                      <i class="fa fa-trash-alt"></i>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
+  <!-- Content -->
+  <div *ngIf="!isLoading && ajustes.length > 0">
+    <!-- Desktop Table -->
+    <div class="table-responsive d-none d-md-block">
+      <table class="table align-middle">
+        <thead>
+          <tr>
+            <th>Detalle</th>
+            <th>Origen</th>
+            <th>Dificultad</th>
+            <th>Estado</th>
+            <th>Urgencia</th>
+            <th class="text-end">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let ajuste of ajustes; trackBy: trackByAjuste"
+              [class.is-deleted]="ajuste._deleted"
+              [class.is-deleting]="ajuste._deleting">
 
-  <!-- Mobile/Tablet Card View -->
-  <div *ngIf="!isLoading && ajustes.length > 0" class="d-lg-none">
-    <div class="ajustes-grid">
-      <div class="ajuste-card" *ngFor="let ajuste of ajustes">
-        <!-- Card Header -->
-        <div class="ajuste-card-header">
-          <div class="flex-grow-1">
-            <h3 class="ajuste-title">
-              {{ ajuste.espacio || ajuste.tipoAjuste }}
-            </h3>
-            <div class="ajuste-meta">
-              <span class="badge badge-sm" [ngClass]="getOriginClass(ajuste.origen)">
-                <i class="fa me-1" [ngClass]="ajuste.origen === 'EMPRESA' ? 'fa-building' : 'fa-hands-helping'"></i>
+            <!-- Detalle -->
+            <td>
+              <div class="primary-info">
+                <div class="info-title">
+                  {{ ajuste.espacio || ajuste.tipoAjuste || 'Solicitud de ajuste' }}
+                </div>
+                <div class="info-subtitle" *ngIf="ajuste.espacio && ajuste.tipoAjuste">
+                  <i class="fa fa-tag me-1"></i>{{ ajuste.tipoAjuste }}
+                </div>
+                <div class="info-text text-muted">
+                  {{ getDescriptionText(ajuste) }}
+                </div>
+
+                <!-- Mensaje inline si hubo error puntual -->
+                <div class="text-danger small mt-1" *ngIf="ajuste._errorMsg">
+                  {{ ajuste._errorMsg }}
+                </div>
+              </div>
+            </td>
+
+            <!-- Origen -->
+            <td>
+              <span class="badge origin-badge"
+                    [ngClass]="getOriginClass(ajuste.origen)"
+                    *ngIf="ajuste.origen">
                 {{ ajuste.origen }}
               </span>
-              <span class="text-muted ms-2 small" *ngIf="ajuste.usuario">
-                {{ ajuste.usuario.nombre }}
+              <span class="text-muted small" *ngIf="!ajuste.origen">-</span>
+            </td>
+
+            <!-- Dificultad -->
+            <td>
+              <span class="badge difficulty-badge"
+                    [ngClass]="getDifficultyClass(ajuste.dificultad)"
+                    *ngIf="ajuste.dificultad">
+                {{ ajuste.dificultad }}
               </span>
+              <span class="text-muted small" *ngIf="!ajuste.dificultad">-</span>
+            </td>
+
+            <!-- Estado -->
+            <td>
+              <!-- Estado normal -->
+              <span class="badge status-badge"
+                    *ngIf="!ajuste._deleted"
+                    [ngClass]="getStatusClass(ajuste.estado)">
+                <i class="fa me-1" [ngClass]="getStatusIcon(ajuste.estado)"></i>
+                {{ ajuste.estado || '—' }}
+              </span>
+
+              <!-- Estado eliminado (fantasma) -->
+              <span class="badge bg-secondary" *ngIf="ajuste._deleted">
+                <i class="fa fa-trash me-1"></i> ELIMINADO
+              </span>
+            </td>
+
+            <!-- Urgencia -->
+            <td>
+              <span class="badge urgency-badge"
+                    [ngClass]="getUrgencyClass(ajuste.urgencia)"
+                    *ngIf="ajuste.urgencia">
+                {{ ajuste.urgencia }}
+              </span>
+              <span class="text-muted small" *ngIf="!ajuste.urgencia">-</span>
+            </td>
+
+            <!-- Acciones -->
+            <td class="text-end">
+              <div class="action-buttons">
+                <a
+                  [routerLink]="['/ajustes/edit', ajuste.idAjuste]"
+                  class="btn-action btn-edit"
+                  data-bs-toggle="tooltip"
+                  title="Editar"
+                  [class.disabled]="ajuste._deleted || ajuste._deleting"
+                  [attr.aria-disabled]="(ajuste._deleted || ajuste._deleting) ? true : null"
+                >
+                  <i class="fa fa-pencil-alt"></i>
+                </a>
+                <button
+                  type="button"
+                  class="btn-action btn-delete"
+                  (click)="deleteAjuste(ajuste.idAjuste)"
+                  data-bs-toggle="tooltip"
+                  title="Eliminar"
+                  [disabled]="ajuste._deleting"
+                >
+                  <i class="fa" [ngClass]="ajuste._deleting ? 'fa-spinner fa-spin' : 'fa-trash-alt'"></i>
+                </button>
+              </div>
+            </td>
+
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Mobile Cards -->
+    <div class="d-md-none">
+      <div class="ajuste-card"
+           *ngFor="let ajuste of ajustes; trackBy: trackByAjuste"
+           [class.is-deleted]="ajuste._deleted"
+           [class.is-deleting]="ajuste._deleting">
+        <div class="ajuste-card-header d-flex justify-content-between align-items-start">
+          <div>
+            <div class="card-title">
+              {{ ajuste.espacio || ajuste.tipoAjuste || 'Solicitud de ajuste' }}
+            </div>
+            <div class="card-subtitle text-muted" *ngIf="ajuste.espacio && ajuste.tipoAjuste">
+              <i class="fa fa-tag me-1"></i>{{ ajuste.tipoAjuste }}
             </div>
           </div>
-          <span class="badge status-badge" [ngClass]="getStatusClass(ajuste.estado)">
-            {{ ajuste.estado }}
-          </span>
+
+          <!-- Badges de estado -->
+          <div>
+            <span class="badge status-badge me-1"
+                  *ngIf="!ajuste._deleted"
+                  [ngClass]="getStatusClass(ajuste.estado)">
+              {{ ajuste.estado || '—' }}
+            </span>
+            <span class="badge bg-secondary" *ngIf="ajuste._deleted">
+              ELIMINADO
+            </span>
+          </div>
         </div>
 
-        <!-- Card Body -->
         <div class="ajuste-card-body">
-          <div class="ajuste-info-row" *ngIf="ajuste.espacio && ajuste.tipoAjuste">
-            <span class="info-label">
-              <i class="fa fa-tag me-2"></i>Tipo
-            </span>
-            <span class="info-value">{{ ajuste.tipoAjuste }}</span>
+          <div class="small text-muted mb-1">
+            {{ getDescriptionText(ajuste) }}
           </div>
 
-          <div class="ajuste-info-row">
-            <span class="info-label">
-              <i class="fa fa-align-left me-2"></i>Descripción
+          <div class="badges-line mt-2">
+            <span class="badge origin-badge me-1" *ngIf="ajuste.origen" [ngClass]="getOriginClass(ajuste.origen)">
+              {{ ajuste.origen }}
             </span>
-            <span class="info-value">{{ getDescriptionText(ajuste) }}</span>
-          </div>
-
-          <div class="ajuste-info-row">
-            <span class="info-label">
-              <i class="fa fa-calendar me-2"></i>Fecha
+            <span class="badge difficulty-badge me-1" *ngIf="ajuste.dificultad" [ngClass]="getDifficultyClass(ajuste.dificultad)">
+              {{ ajuste.dificultad }}
             </span>
-            <span class="info-value">{{ ajuste.fechaRecomendacion | date:'dd/MM/yyyy' }}</span>
-          </div>
-
-          <div class="ajuste-info-row" *ngIf="ajuste.urgencia">
-            <span class="info-label">
-              <i class="fa fa-exclamation-circle me-2"></i>Urgencia
-            </span>
-            <span class="badge urgency-badge" [ngClass]="getUrgencyClass(ajuste.urgencia)">
+            <span class="badge urgency-badge" *ngIf="ajuste.urgencia" [ngClass]="getUrgencyClass(ajuste.urgencia)">
               {{ ajuste.urgencia }}
             </span>
           </div>
 
-          <div class="ajuste-info-row" *ngIf="ajuste.dificultad">
-            <span class="info-label">
-              <i class="fa fa-chart-line me-2"></i>Dificultad
-            </span>
-            <span class="badge difficulty-badge" [ngClass]="getDifficultyClass(ajuste.dificultad)">
-              {{ ajuste.dificultad }}
-            </span>
+          <!-- Mensaje inline si hubo error puntual -->
+          <div class="text-danger small mt-2" *ngIf="ajuste._errorMsg">
+            {{ ajuste._errorMsg }}
           </div>
         </div>
 
-        <!-- Card Footer -->
-        <div class="ajuste-card-footer">
+        <div class="ajuste-card-footer d-flex gap-2">
           <a
             [routerLink]="['/ajustes/edit', ajuste.idAjuste]"
             class="btn btn-sm btn-outline-primary"
+            [class.disabled]="ajuste._deleted || ajuste._deleting"
+            [attr.aria-disabled]="(ajuste._deleted || ajuste._deleting) ? true : null"
           >
             <i class="fa fa-pencil-alt me-2"></i>Editar
           </a>
@@ -198,8 +204,10 @@
             type="button"
             class="btn btn-sm btn-outline-danger"
             (click)="deleteAjuste(ajuste.idAjuste)"
+            [disabled]="ajuste._deleting"
           >
-            <i class="fa fa-trash-alt me-2"></i>Eliminar
+            <i class="fa" [ngClass]="ajuste._deleting ? 'fa-spinner fa-spin me-2' : 'fa-trash-alt me-2'"></i>
+            Eliminar
           </button>
         </div>
       </div>

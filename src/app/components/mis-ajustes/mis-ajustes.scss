@@ -464,3 +464,19 @@
     }
   }
 }
+.is-deleted {
+  opacity: .55;
+  filter: grayscale(0.35);
+  pointer-events: auto; // dejamos click para mostrar “ya eliminado”
+}
+
+.is-deleting {
+  opacity: .75;
+}
+
+.action-buttons .disabled,
+.btn[aria-disabled="true"] {
+  pointer-events: none;
+  opacity: .6;
+}
+  
