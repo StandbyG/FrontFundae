@@ -21,7 +21,7 @@ export class AuthService {
   register(data: Usuario): Observable<Usuario> {
   const payload = {
     ...data,
-    contraseña: data.password  // 🔁 El backend espera "contraseña"
+    contraseña: data.password
   };
   return this.http.post<Usuario>(`${this.apiUrl}/register`, payload);
 }

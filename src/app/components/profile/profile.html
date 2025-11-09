@@ -1,35 +1,252 @@
 <div class="profile-container">
-  <h2>Mi Perfil</h2>
-  <p>Aquí puedes ver y actualizar tu información personal.</p>
-
-  <div *ngIf="isLoading" class="text-center">
-    <div class="spinner-border" role="status">
-      <span class="visually-hidden">Cargando...</span>
+  <!-- Header -->
+  <div class="profile-header">
+    <div class="header-content">
+      <div class="header-icon">
+        <i class="bi bi-person-circle"></i>
+      </div>
+      <div class="header-text">
+        <h1 class="profile-title">Mi Perfil</h1>
+        <p class="profile-subtitle">Gestiona tu información personal</p>
+      </div>
+    </div>
+    <div class="profile-badge" *ngIf="usuario">
+      <span class="badge-text"
+        >{{ usuario.tipoUsuario === 'empleador' ? 'Empleador' : 'Administrador'
+        }}</span
+      >
     </div>
   </div>
 
-  <form *ngIf="!isLoading" [formGroup]="profileForm" (ngSubmit)="onSubmit()">
-    <div class="mb-3">
-      <label for="nombre" class="form-label">Nombre</label>
-      <input type="text" id="nombre" class="form-control" formControlName="nombre">
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="spinner-wrapper">
+      <div class="spinner"></div>
+      <p class="loading-text">Cargando información del perfil...</p>
     </div>
+  </div>
 
-    <div class="mb-3">
-      <label for="apellido" class="form-label">Apellido</label>
-      <input type="text" id="apellido" class="form-control" formControlName="apellido">
-    </div>
+  <!-- Success Message -->
+  <div *ngIf="successMessage" class="alert-message alert-success">
+    <i class="bi bi-check-circle-fill"></i>
+    <span>{{ successMessage }}</span>
+  </div>
 
-    <div class="mb-3">
-      <label for="correo" class="form-label">Correo Electrónico</label>
-      <input type="email" id="correo" class="form-control" formControlName="correo">
+  <!-- Error Message -->
+  <div *ngIf="errorMessage" class="alert-message alert-error">
+    <i class="bi bi-exclamation-circle-fill"></i>
+    <span>{{ errorMessage }}</span>
+  </div>
+
+  <!-- Form -->
+  <form
+    *ngIf="!isLoading"
+    [formGroup]="profileForm"
+    (ngSubmit)="onSubmit()"
+    class="profile-form"
+  >
+    <!-- Información Personal -->
+    <section class="form-section">
+      <h3 class="section-title">
+        <i class="bi bi-person"></i>
+        Información Personal
+      </h3>
+
+      <div class="form-grid">
+        <!-- Nombre -->
+        <div class="form-group">
+          <label for="nombre" class="form-label">
+            Nombre Completo
+            <span class="required">*</span>
+          </label>
+          <div
+            class="input-wrapper"
+            [class.error]="nombre?.invalid && nombre?.touched"
+          >
+            <i class="bi bi-person input-icon"></i>
+            <input
+              type="text"
+              id="nombre"
+              class="form-input"
+              formControlName="nombre"
+              placeholder="Ingresa tu nombre completo"
+              [class.invalid]="nombre?.invalid && nombre?.touched"
+            />
+          </div>
+          <div class="error-message" *ngIf="nombre?.invalid && nombre?.touched">
+            <i class="bi bi-exclamation-circle"></i>
+            <span *ngIf="nombre?.errors?.['required']"
+              >El nombre es requerido</span
+            >
+            <span *ngIf="nombre?.errors?.['minlength']"
+              >El nombre debe tener al menos 2 caracteres</span
+            >
+          </div>
+        </div>
+
+        <!-- Correo -->
+        <div class="form-group">
+          <label for="correo" class="form-label">
+            Correo Electrónico
+            <span class="required">*</span>
+          </label>
+          <div
+            class="input-wrapper"
+            [class.error]="correo?.invalid && correo?.touched"
+          >
+            <i class="bi bi-envelope input-icon"></i>
+            <input
+              type="email"
+              id="correo"
+              class="form-input"
+              formControlName="correo"
+              placeholder="correo@ejemplo.com"
+              [class.invalid]="correo?.invalid && correo?.touched"
+            />
+          </div>
+
+          <div class="error-message" *ngIf="correo?.invalid && correo?.touched">
+            <i class="bi bi-exclamation-circle"></i>
+            <span *ngIf="correo?.errors?.['required']"
+              >El correo es requerido</span
+            >
+            <span *ngIf="correo?.touched && correo?.errors?.['emailInUse']"
+              >Ese correo ya está en uso.</span
+            >
+            <span *ngIf="correo?.errors?.['email']"
+              >Ingresa un correo electrónico válido</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- Info sobre contraseña -->
+      <div class="info-box">
+        <i class="bi bi-info-circle"></i>
+        <div class="info-text">
+          <strong>Nota:</strong> La contraseña no se puede editar desde esta
+          sección. Si necesitas cambiar tu contraseña, contacta al administrador
+          o utiliza la opción de recuperación de contraseña.
+        </div>
+      </div>
+    </section>
+
+    <!-- Información de Empresa (Solo para Empleadores) -->
+    <section class="form-section" *ngIf="isEmpleador">
+      <h3 class="section-title">
+        <i class="bi bi-building"></i>
+        Información de Empresa
+      </h3>
+
+      <div class="form-grid">
+        <!-- Nombre de Empresa -->
+        <div class="form-group">
+          <label for="nombreEmpresa" class="form-label">
+            Nombre de la Empresa
+          </label>
+          <div class="input-wrapper">
+            <i class="bi bi-building input-icon"></i>
+            <input
+              type="text"
+              id="nombreEmpresa"
+              class="form-input"
+              formControlName="nombreEmpresa"
+              placeholder="Nombre de tu empresa"
+            />
+          </div>
+        </div>
+
+        <!-- RUC -->
+        <div class="form-group">
+          <label for="ruc" class="form-label"> RUC </label>
+          <div class="input-wrapper">
+            <i class="bi bi-card-text input-icon"></i>
+            <input
+              type="text"
+              id="ruc"
+              class="form-input"
+              formControlName="ruc"
+              placeholder="Número de RUC"
+            />
+          </div>
+        </div>
+
+        <!-- Sector -->
+        <div class="form-group">
+          <label for="sector" class="form-label"> Sector </label>
+          <div class="input-wrapper">
+            <i class="bi bi-briefcase input-icon"></i>
+            <input
+              type="text"
+              id="sector"
+              class="form-input"
+              formControlName="sector"
+              placeholder="Sector de la empresa"
+            />
+          </div>
+        </div>
+
+        <!-- Dirección -->
+        <div class="form-group full-width">
+          <label for="direccion" class="form-label"> Dirección </label>
+          <div class="input-wrapper">
+            <i class="bi bi-geo-alt input-icon"></i>
+            <input
+              type="text"
+              id="direccion"
+              class="form-input"
+              formControlName="direccion"
+              placeholder="Dirección de la empresa"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Información de Solo Lectura -->
+    <section class="form-section read-only-section" *ngIf="usuario">
+      <h3 class="section-title">
+        <i class="bi bi-info-circle"></i>
+        Información del Sistema
+      </h3>
+
+      <div class="read-only-info">
+        <div class="info-item">
+          <span class="info-label">
+            <i class="bi bi-calendar"></i>
+            Fecha de Creación:
+          </span>
+          <span class="info-value">
+            {{ usuario.fechaCreacion ? (usuario.fechaCreacion |
+            date:'dd/MM/yyyy') : 'No disponible' }}
+          </span>
+        </div>
+        <div class="info-item" *ngIf="usuario.estadoCumplimiento">
+          <span class="info-label">
+            <i class="bi bi-check-circle"></i>
+            Estado de Cumplimiento:
+          </span>
+          <span
+            class="info-value badge-status"
+            [class]="'status-' + usuario.estadoCumplimiento.toLowerCase()"
+          >
+            {{ usuario.estadoCumplimiento }}
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Actions -->
+    <div class="form-actions">
+      <button
+        type="submit"
+        class="btn-primary"
+        [disabled]="profileForm.invalid || isSubmitting"
+      >
+        <i class="bi bi-check-lg" *ngIf="!isSubmitting"></i>
+        <span *ngIf="isSubmitting" class="spinner-small"></span>
+        <span>{{ isSubmitting ? 'Guardando...' : 'Guardar Cambios' }}</span>
+      </button>
     </div>
-    
-    <button type="submit" class="btn btn-primary w-100" [disabled]="profileForm.invalid || isLoading">
-      Guardar Cambios
-    </button>
   </form>
-
-  <div *ngIf="successMessage" class="alert alert-success mt-3">
-    {{ successMessage }}
-  </div>
 </div>

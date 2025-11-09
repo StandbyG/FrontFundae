@@ -25,22 +25,18 @@ export class UsuarioService {
     });
   }
 
-    // Obtiene un usuario por su ID
   getUsuarioById(id: number): Observable<Usuario> {
     return this.http.get<Usuario>(`${this.apiUrl}/${id}`, {
-      headers: this.getAuthHeaders() // ✅ Cabeceras añadidas
+      headers: this.getAuthHeaders()
     });
   }
 
-  // Actualiza un usuario
   updateUsuario(id: number, usuario: Usuario): Observable<Usuario> {
     return this.http.put<Usuario>(`${this.apiUrl}/${id}`, usuario, {
-      headers: this.getAuthHeaders() // ✅ Cabeceras añadidas
+      headers: this.getAuthHeaders()
     });
   }
 
-  // Si tienes otros métodos que llaman a endpoints protegidos, también debes añadirles las cabeceras.
-  // Por ejemplo:
   
   getAllUsuarios(): Observable<Usuario[]> {
     return this.http.get<Usuario[]>(this.apiUrl, {

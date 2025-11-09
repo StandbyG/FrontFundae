@@ -31,7 +31,7 @@ export const routes: Routes = [
   {
     path: 'admin/usuarios',
     component: UserListComponent,
-    canActivate: [AdminGuard], // 👈 PROTEGEMOS LA RUTA
+    canActivate: [AdminGuard],
   },
   { path: 'verificacion/create', component: CrearVerificacionComponent },
   { path: 'feedbacks', component: NotificationCenterComponent },

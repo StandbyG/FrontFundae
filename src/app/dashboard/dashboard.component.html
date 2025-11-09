@@ -425,6 +425,51 @@
       </div>
     </section>
 
+    <!-- Alertas: Empleadores sin Ajustes -->
+    <section class="alertas-section" *ngIf="empleadoresSinAjustes.length > 0">
+      <h3 class="section-title">
+        <i
+          class="bi bi-exclamation-triangle-fill me-2"
+          style="color: #f59e0b"
+        ></i>
+        Alertas del Sistema
+      </h3>
+      <div class="alert-card alert-warning">
+        <div class="alert-header">
+          <div class="alert-icon-wrapper">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+          </div>
+          <div class="alert-content">
+            <h4 class="alert-title">Empleadores sin Ajustes Razonables</h4>
+            <p class="alert-message">
+              Se detectaron
+              <strong>{{ empleadoresSinAjustes.length }}</strong> empleador(es)
+              que no han registrado ningún ajuste razonable.
+            </p>
+          </div>
+        </div>
+        <div class="empleadores-list">
+          <div
+            *ngFor="let empleador of empleadoresSinAjustes"
+            class="empleador-item"
+          >
+            <div class="empleador-info">
+              <i class="bi bi-building me-2"></i>
+              <div>
+                <strong>{{ empleador.nombre }}</strong>
+                <div class="empleador-details" *ngIf="empleador.nombreEmpresa">
+                  <span class="text-muted">{{ empleador.nombreEmpresa }}</span>
+                </div>
+                <div class="empleador-details" *ngIf="empleador.correo">
+                  <span class="text-muted">{{ empleador.correo }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Notification Center -->
     <section class="notification-center-section">
       <h3 class="section-title">
@@ -542,9 +587,13 @@
               </h4>
               <p class="list-subtitle">
                 {{
-                  (ajuste.observacion || ajuste.descripcion || "Sin descripción")
+                  ajuste.observacion || ajuste.descripcion || "Sin descripción"
                     | slice : 0 : 120
-                }}{{ (ajuste.observacion || ajuste.descripcion || "").length > 120 ? "..." : "" }}
+                }}{{
+                  (ajuste.observacion || ajuste.descripcion || "").length > 120
+                    ? "..."
+                    : ""
+                }}
               </p>
             </div>
             <div class="list-meta">
@@ -639,7 +688,11 @@
               aria-label="Gráfico de estados de ajustes"
             ></canvas>
           </div>
-          <div class="chart-legend" role="list" aria-label="Leyenda del gráfico">
+          <div
+            class="chart-legend"
+            role="list"
+            aria-label="Leyenda del gráfico"
+          >
             <div
               class="legend-item"
               *ngFor="let item of chartLegendData"
@@ -683,8 +736,8 @@
       </div>
       <h3 class="empty-title">Comienza tu solicitud</h3>
       <p class="empty-text">
-        Aún no has solicitado ningún ajuste razonable. Crea tu primera
-        solicitud para comenzar el proceso.
+        Aún no has solicitado ningún ajuste razonable. Crea tu primera solicitud
+        para comenzar el proceso.
       </p>
       <a
         [routerLink]="['/ajustes/create']"

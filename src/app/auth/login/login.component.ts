@@ -16,13 +16,19 @@ import { AuthService } from '../../core/services/auth.services';
     trigger('slideIn', [
       transition(':enter', [
         style({ transform: 'translateX(-20px)', opacity: 0 }),
-        animate('300ms ease-out', style({ transform: 'translateX(0)', opacity: 1 }))
+        animate(
+          '300ms ease-out',
+          style({ transform: 'translateX(0)', opacity: 1 })
+        ),
       ]),
       transition(':leave', [
-        animate('200ms ease-in', style({ transform: 'translateX(-20px)', opacity: 0 }))
-      ])
-    ])
-  ]
+        animate(
+          '200ms ease-in',
+          style({ transform: 'translateX(-20px)', opacity: 0 })
+        ),
+      ]),
+    ]),
+  ],
 })
 export class LoginComponent implements OnInit, OnDestroy {
   // === PROPIEDADES DEL FORMULARIO ===
@@ -40,7 +46,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   // === CONSTANTES DE VALIDACIÓN ===
-  private readonly EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  private readonly EMAIL_REGEX =
+    /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   private readonly MIN_PASSWORD_LENGTH = 6;
   private readonly MAX_LOGIN_ATTEMPTS = 5;
   private readonly LOCKOUT_DURATION = 15 * 60 * 1000; // 15 minutos
@@ -49,10 +56,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   private loginAttempts = 0;
   private lockoutUntil: number | null = null;
 
-  constructor(
-    private auth: AuthService,
-    private router: Router
-  ) {}
+  constructor(private auth: AuthService, private router: Router) {}
 
   ngOnInit(): void {
     this.loadRememberedCredentials();
@@ -173,9 +177,11 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.logLoginEvent('success');
 
     // Redirigir con delay para mostrar mensaje
-    timer(1500).pipe(takeUntil(this.destroy$)).subscribe(() => {
-      this.router.navigate(['/dashboard']);
-    });
+    timer(1500)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.router.navigate(['/dashboard']);
+      });
   }
 
   private handleLoginError(error: any): void {
@@ -190,17 +196,26 @@ export class LoginComponent implements OnInit, OnDestroy {
     // Mapear errores específicos del backend
     switch (error.status) {
       case 401:
-        this.error = 'Credenciales incorrectas. Verifica tu correo y contraseña.';
+        // Si el backend envía un mensaje específico, usarlo
+        if (error.error?.message) {
+          this.error = error.error.message;
+        } else {
+          // Mensaje por defecto para contraseña incorrecta
+          this.error =
+            'La contraseña ingresada es incorrecta. Por favor, verifica tus credenciales e intenta nuevamente.';
+        }
         break;
       case 403:
         this.error = 'Tu cuenta está desactivada. Contacta al administrador.';
         break;
       case 429:
-        this.error = 'Demasiados intentos. Espera unos minutos antes de intentar nuevamente.';
+        this.error =
+          'Demasiados intentos. Espera unos minutos antes de intentar nuevamente.';
         this.setLockout();
         break;
       case 0:
-        this.error = 'No se pudo conectar al servidor. Verifica tu conexión a internet.';
+        this.error =
+          'No se pudo conectar al servidor. Verifica tu conexión a internet.';
         break;
       case 500:
       case 502:
@@ -258,7 +273,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
       if (lockout) {
         this.lockoutUntil = parseInt(lockout, 10);
-        
+
         // Verificar si el lockout expiró
         if (Date.now() > this.lockoutUntil) {
           this.resetLoginAttempts();
@@ -274,10 +289,10 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   private getRemainingLockoutTime(): string {
     if (!this.lockoutUntil) return '0 minutos';
-    
+
     const remaining = this.lockoutUntil - Date.now();
     const minutes = Math.ceil(remaining / 60000);
-    
+
     if (minutes < 1) return 'menos de 1 minuto';
     return `${minutes} minuto${minutes > 1 ? 's' : ''}`;
   }
@@ -344,7 +359,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   private logLoginEvent(type: 'success' | 'error', statusCode?: number): void {
     // Aquí puedes integrar con servicios de analytics
     // Ej: Google Analytics, Mixpanel, etc.
-    console.log(`Login ${type}`, { statusCode, timestamp: new Date().toISOString() });
+    console.log(`Login ${type}`, {
+      statusCode,
+      timestamp: new Date().toISOString(),
+    });
   }
 
   // === GETTERS PARA TEMPLATE ===
