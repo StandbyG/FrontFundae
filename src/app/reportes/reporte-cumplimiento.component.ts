@@ -172,6 +172,12 @@ export class ReporteCumplimientoComponent {
     this.loading.set(true);
     this.error.set(null);
 
+    if (!this.empresa || !this.desde) {
+      this.error.set('No se pudo generar el reporte, se requiere empresa o fecha.');
+      this.loading.set(false);
+      return;
+    }
+
     this.api.cumplimiento({
       usuarioId: this.usuarioId,
       empresa: this.empresa?.trim() || undefined,

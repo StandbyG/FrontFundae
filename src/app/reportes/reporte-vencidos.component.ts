@@ -133,6 +133,12 @@ export class ReporteVencidosComponent {
     this.loading.set(true);
     this.error.set(null);
 
+    if (!this.empresa || !this.fechaCorte) {
+      this.error.set('No se pudo generar el reporte, se requiere empresa o fecha de corte.');
+      this.loading.set(false);
+      return;
+    }
+
     this.api.vencidos({
       usuarioId: this.usuarioId,
       empresa: this.empresa?.trim() || undefined,

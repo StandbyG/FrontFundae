@@ -2087,14 +2087,14 @@ interface StatusColors {
 
       .chatbot-panel {
         position: fixed;
-        bottom: 9rem;
+        bottom: 2rem;
         right: 2.5rem;
         width: min(460px, calc(100vw - 5rem));
         min-width: 320px;
         max-width: 90vw;
-        height: min(72vh, 680px);
+        height: fit-content;
         min-height: 400px;
-        max-height: calc(100vh - 12rem);
+        max-height: 900px;
         background: var(--bg-primary);
         border: 2px solid var(--border-color);
         border-radius: var(--border-radius-xl);
@@ -2104,7 +2104,7 @@ interface StatusColors {
         transform: translateY(30px) scale(0.9);
         pointer-events: none;
         transition: all var(--transition-base);
-        z-index: 999;
+        z-index: 9999;
         display: flex;
         flex-direction: column;
         box-sizing: border-box;
